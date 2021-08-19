@@ -1,1 +1,1 @@
-# M_Circus
+# MassCircus GUI
