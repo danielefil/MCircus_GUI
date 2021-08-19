@@ -1,2 +1,1 @@
-# MCircus_GUI
-GUI implementation fro MassCircus
+# M_Circus
