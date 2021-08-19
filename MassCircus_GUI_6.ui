@@ -52,7 +52,7 @@
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>30</y>
+         <y>70</y>
          <width>731</width>
          <height>90</height>
         </rect>
@@ -67,15 +67,15 @@
         <property name="verticalSpacing">
          <number>6</number>
         </property>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="SP_line"/>
-        </item>
         <item row="0" column="2">
-         <widget class="QPushButton" name="openSP_button">
+         <widget class="QPushButton" name="OpenSP_btn">
           <property name="text">
            <string>Open</string>
           </property>
          </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="SP_line"/>
         </item>
         <item row="0" column="0">
          <widget class="QLabel" name="SP_label">
@@ -102,35 +102,35 @@
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>130</y>
+         <y>30</y>
          <width>731</width>
          <height>31</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="2">
-         <widget class="QRadioButton" name="Chrom_radio_4">
+         <widget class="QRadioButton" name="raw_rdbtn">
           <property name="text">
            <string>*.raw</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
-         <widget class="QRadioButton" name="Chrom_radio">
-          <property name="text">
-           <string>*.csv</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="3">
-         <widget class="QRadioButton" name="Chrom_radio_3">
+         <widget class="QRadioButton" name="mzML_rdbtn">
           <property name="text">
            <string>*.mzML</string>
           </property>
          </widget>
         </item>
+        <item row="0" column="1">
+         <widget class="QRadioButton" name="csv_rdbtn">
+          <property name="text">
+           <string>*.csv</string>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="0">
-         <widget class="QLabel" name="SP_label_3">
+         <widget class="QLabel" name="FileExtension_Label">
           <property name="frameShape">
            <enum>QFrame::NoFrame</enum>
           </property>
@@ -138,7 +138,7 @@
            <enum>QFrame::Plain</enum>
           </property>
           <property name="text">
-           <string>File type</string>
+           <string>File extension</string>
           </property>
           <property name="scaledContents">
            <bool>false</bool>

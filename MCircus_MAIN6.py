@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
-from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog
+from PyQt5.QtWidgets import QDialog, QMainWindow, QApplication, QFileDialog
 from pathlib import Path
 import sys
 
@@ -13,55 +13,94 @@ import element
 from Search_to_function_isopattern_10 import search_peak
 
 
+class RawFilterDialog(QDialog):
+    def __init__(self, lista, parent = None):   
+        super(RawFilterDialog, self).__init__(parent) # Call the inherited classes __init__ method
+        uic.loadUi('RawFilter.ui', self) # Load the .ui file
+        self.setWindowTitle("Filter Selector")
+
+        self.passlista = lista
+        self.comboBox.addItems(self.passlista)
+
 class Ui(QtWidgets.QMainWindow):
     def __init__(self):   
         super(Ui, self).__init__() # Call the inherited classes __init__ method
         uic.loadUi('MassCircus_GUI_6.ui', self) # Load the .ui file
         self.show() # Show the GUI
-    
-'''
-class MainWindow(QtWidgets.QMainWindow, MassCircus_GUI_6.Ui_MainWindow):
 
-    def __init__(self):
-
-        # Setting and connecting all GUI Components
-        super(MainWindow, self).__init__()
-        self.ui = MassCircus_GUI_6.Ui_MainWindow()
-        self.ui.setupUi(self)
-        self.grey_components()
+        #self.grey_components()
         self.enable_connection()
-        self.addotti = []
-        self.filterValues = [False, 0, 0]
-        self.carica = 0
-        self.DB_path = ""
-        self.SP_path = ""
-        self.ppm_tolletance = self.ui.ppm_spinbox.value()
-        self.da_tolletance = self.ui.dalton_spinbox.value()
-        self.search_mode = ""
-
-        # DISABLE ELEMENTS
+        
+        # GLOBAL VARIABLES
+        self.Spectralist = []
+        self.fileext = None
+        #self.adducts = []
+        #self.filterValues = [False, 0, 0]
+        #self.carica = 0
+        #self.DB_path = ""
+        #self.SP_path = ""
+        #self.ppm_tolletance = self.ppm_spinbox.value()
+        #self.da_tolletance = self.dalton_spinbox.value()
+        #self.search_mode = ""
+    '''
+    # DISABLE ELEMENTS
     def grey_components(self):
-        self.ui.gBPositive.setEnabled(False)
-        self.ui.gBNegative.setEnabled(False)
-        self.ui.create_button.setEnabled(False)
-        self.ui.find_button.setEnabled(False)
-        self.ui.ppm_spinbox.setEnabled(False)
-        self.ui.dalton_spinbox.setEnabled(False)
-        self.ui.gBFilter.setEnabled(False)
-    
-        # CONNECTIONS
+        #self.gBPositive.setEnabled(False)
+        #self.gBNegative.setEnabled(False)
+        #self.create_button.setEnabled(False)
+        #self.find_button.setEnabled(False)
+        #self.ppm_spinbox.setEnabled(False)
+        #self.dalton_spinbox.setEnabled(False)
+        #self.gBFilter.setEnabled(False)
+    '''
+
+    # CONNECTIONS
     def enable_connection(self):
-        self.ui.Positive_radio.toggled.connect(self.Enable_Adducts_Selector)
-        self.ui.Negative_radio.toggled.connect(self.Enable_Adducts_Selector)
-        self.ui.ppm_radio.toggled.connect(self.Enable_Finder_Selector)
-        self.ui.dalton_radio.toggled.connect(self.Enable_Finder_Selector)
-        self.ui.cBFilter.toggled.connect(self.Enable_Filtering)
+        self.OpenSP_btn.clicked.connect(self.openSpectraDialog)
+        self.csv_rdbtn.toggled.connect(self.fileextension)
+        self.raw_rdbtn.toggled.connect(self.fileextension)
+        self.mzML_rdbtn.toggled.connect(self.fileextension)
+        #self.ui.Positive_radio.toggled.connect(self.Enable_Adducts_Selector)
+        #self.ui.Negative_radio.toggled.connect(self.Enable_Adducts_Selector)
+        #self.ui.ppm_radio.toggled.connect(self.Enable_Finder_Selector)
+        #self.ui.dalton_radio.toggled.connect(self.Enable_Finder_Selector)
+        #self.ui.cBFilter.toggled.connect(self.Enable_Filtering)
+        #self.ui.create_button.clicked.connect(self.charge_selector)
+        #self.ui.openDB_button.clicked.connect(self.openDatabaseDialog)
+        #self.ui.find_button.clicked.connect(self.finder)
+    
+    # FILES TYPE SELECTOR 
 
-        self.ui.create_button.clicked.connect(self.charge_selector)
-        self.ui.openDB_button.clicked.connect(self.openDatabaseDialog)
-        self.ui.openSP_button.clicked.connect(self.openSpectraDialog)
-        self.ui.find_button.clicked.connect(self.finder)
+    def fileextension(self):
+        if self.csv_rdbtn.isChecked() == True:
+            self.fileext = '*.csv'
+        if self.raw_rdbtn.isChecked() == True:
+            self.fileext = '*.raw'
+        if self.mzML_rdbtn.isChecked() == True:
+            self.fileext = '*.mzML'
 
+    # OPEN FILES DIALOG - SPECTRA (MULTIPLE)
+    def openSpectraDialog(self):
+        if self.fileext == None:
+            QtWidgets.QMessageBox.warning(self, "Warning", "Select imput file type")
+        else:
+            options = QFileDialog.Options()
+            options |= QFileDialog.DontUseNativeDialog
+            self.SP_folderPath = QFileDialog.getExistingDirectory()
+            if self.SP_folderPath:
+                self.SP_line.setText(self.SP_folderPath)
+                self.SpectraPath = Path(self.SP_folderPath)
+        
+            for _file in self.SpectraPath.glob(self.fileext):
+                self.Spectralist.append(_file)
+            list1 = ['1','2','3']
+            #print(self.Spectralist)   ## FOR DEBUG
+            if self.fileext == '*.raw':
+                ## scrivere funzione per la selezione dei filtri
+                dlg = RawFilterDialog(list1)
+                dlg.exec()
+
+'''
         # ENABLE/DISABLE +/- ADDUCTOR SELECTOR
     def Enable_Adducts_Selector(self):
         if self.ui.Positive_radio.isChecked():
@@ -150,14 +189,7 @@ class MainWindow(QtWidgets.QMainWindow, MassCircus_GUI_6.Ui_MainWindow):
             self.ui.DB_line.setText(files[0])
             self.DB_path = files[0]
 
-        # OPEN FILES DIALOG - SPECTRA (MULTIPLE)
-    def openSpectraDialog(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.SP_folderPath = QFileDialog.getExistingDirectory()
-        if self.SP_folderPath:
-            self.ui.SP_line.setText(self.SP_folderPath)
-            self.files = Path(self.SP_folderPath)
+
 
         # FINDER
     def finder(self):
