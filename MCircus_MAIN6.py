@@ -1,6 +1,4 @@
 import rawlib
-
-
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import QDialog, QMainWindow, QApplication, QFileDialog
 from pathlib import Path
@@ -58,14 +56,16 @@ class Ui(QtWidgets.QMainWindow):
         self.fileext = None
         self.SpectraPath = ''
         self.filterValues = [False, 0, 0]
+        self.search_mode = ''
         
+        self.DB_file = ''
+        self.EC_file = ''
+
         #self.adducts = []
         #self.carica = 0
-        #self.DB_path = ""
 
         #self.ppm_tolletance = self.ppm_spinbox.value()
         #self.da_tolletance = self.dalton_spinbox.value()
-        #self.search_mode = ""
     
     # DISABLE ELEMENTS
     def grey_components(self):

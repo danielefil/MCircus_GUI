@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>812</width>
-    <height>403</height>
+    <width>852</width>
+    <height>406</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,12 +19,12 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>791</width>
+      <width>821</width>
       <height>371</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tab_1">
      <attribute name="title">
@@ -287,17 +287,17 @@
      <attribute name="title">
       <string>Find method</string>
      </attribute>
-     <widget class="QGroupBox" name="groupBox_5">
+     <widget class="QGroupBox" name="gBox_SearchMethod">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>30</y>
-        <width>761</width>
-        <height>131</height>
+        <y>20</y>
+        <width>791</width>
+        <height>191</height>
        </rect>
       </property>
       <property name="title">
-       <string>Search from Compounds Database</string>
+       <string>Search method</string>
       </property>
       <property name="flat">
        <bool>false</bool>
@@ -305,100 +305,133 @@
       <property name="checkable">
        <bool>false</bool>
       </property>
-      <widget class="QWidget" name="gridLayoutWidget_2">
+      <widget class="QRadioButton" name="DB_radio">
        <property name="geometry">
         <rect>
-         <x>20</x>
-         <y>30</y>
-         <width>731</width>
-         <height>90</height>
+         <x>10</x>
+         <y>130</y>
+         <width>141</width>
+         <height>17</height>
         </rect>
        </property>
-       <layout class="QGridLayout" name="files_selectro_Layout_2">
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <property name="horizontalSpacing">
-         <number>18</number>
-        </property>
-        <property name="verticalSpacing">
-         <number>6</number>
-        </property>
-        <item row="0" column="2">
-         <widget class="QPushButton" name="openDB_button_2">
-          <property name="text">
-           <string>Open</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="DB_line_2"/>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="DB_label_2">
-          <property name="text">
-           <string>DataBase</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <property name="text">
+        <string>DB File</string>
+       </property>
       </widget>
-     </widget>
-     <widget class="QGroupBox" name="groupBox_6">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>170</y>
-        <width>761</width>
-        <height>131</height>
-       </rect>
-      </property>
-      <property name="title">
-       <string>Search from Elemental composition</string>
-      </property>
-      <property name="flat">
-       <bool>false</bool>
-      </property>
-      <property name="checkable">
-       <bool>false</bool>
-      </property>
-      <widget class="QWidget" name="gridLayoutWidget_4">
+      <widget class="QRadioButton" name="EC_radio">
        <property name="geometry">
         <rect>
-         <x>20</x>
-         <y>30</y>
-         <width>731</width>
-         <height>90</height>
+         <x>10</x>
+         <y>40</y>
+         <width>191</width>
+         <height>17</height>
         </rect>
        </property>
-       <layout class="QGridLayout" name="files_selectro_Layout_3">
-        <property name="bottomMargin">
-         <number>0</number>
+       <property name="text">
+        <string>Elemental composition</string>
+       </property>
+      </widget>
+      <widget class="QGroupBox" name="gBox_EC">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>10</y>
+         <width>661</width>
+         <height>80</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string/>
+       </property>
+       <widget class="QWidget" name="gridLayoutWidget_4">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>631</width>
+          <height>61</height>
+         </rect>
         </property>
-        <property name="horizontalSpacing">
-         <number>18</number>
+        <layout class="QGridLayout" name="files_selectro_Layout_3">
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <property name="horizontalSpacing">
+          <number>18</number>
+         </property>
+         <property name="verticalSpacing">
+          <number>6</number>
+         </property>
+         <item row="0" column="2">
+          <widget class="QPushButton" name="EC_Open_btn">
+           <property name="text">
+            <string>Open</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="EC_line"/>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="EC_label">
+           <property name="text">
+            <string>Elements file</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QGroupBox" name="gBox_DB">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>100</y>
+         <width>661</width>
+         <height>80</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string/>
+       </property>
+       <widget class="QWidget" name="gridLayoutWidget_2">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>631</width>
+          <height>61</height>
+         </rect>
         </property>
-        <property name="verticalSpacing">
-         <number>6</number>
-        </property>
-        <item row="0" column="2">
-         <widget class="QPushButton" name="openDB_button_3">
-          <property name="text">
-           <string>Open</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="DB_line_3"/>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="DB_label_3">
-          <property name="text">
-           <string>DataBase</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+        <layout class="QGridLayout" name="files_selectro_Layout_2">
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <property name="horizontalSpacing">
+          <number>18</number>
+         </property>
+         <property name="verticalSpacing">
+          <number>6</number>
+         </property>
+         <item row="0" column="2">
+          <widget class="QPushButton" name="DB_Open_btn">
+           <property name="text">
+            <string>Open</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="DB_line"/>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="DB_label">
+           <property name="text">
+            <string>DataBase file</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </widget>
      <widget class="QPushButton" name="Next3_btn">
