@@ -18,13 +18,13 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>20</y>
+      <y>10</y>
       <width>791</width>
       <height>371</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_1">
      <attribute name="title">
@@ -151,6 +151,19 @@
        </layout>
       </widget>
      </widget>
+     <widget class="QPushButton" name="Next1_btn">
+      <property name="geometry">
+       <rect>
+        <x>680</x>
+        <y>310</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Next</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
@@ -256,6 +269,19 @@
        </widget>
       </widget>
      </widget>
+     <widget class="QPushButton" name="Next2_btn">
+      <property name="geometry">
+       <rect>
+        <x>690</x>
+        <y>310</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Next</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
@@ -267,7 +293,7 @@
         <x>10</x>
         <y>30</y>
         <width>761</width>
-        <height>161</height>
+        <height>131</height>
        </rect>
       </property>
       <property name="title">
@@ -350,10 +376,10 @@
      <widget class="QGroupBox" name="groupBox_6">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>210</y>
+        <x>0</x>
+        <y>170</y>
         <width>761</width>
-        <height>161</height>
+        <height>131</height>
        </rect>
       </property>
       <property name="title">
@@ -433,6 +459,19 @@
        </layout>
       </widget>
      </widget>
+     <widget class="QPushButton" name="Next3_btn">
+      <property name="geometry">
+       <rect>
+        <x>700</x>
+        <y>310</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Next</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_4">
      <attribute name="title">
@@ -442,7 +481,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>220</y>
+        <y>180</y>
         <width>761</width>
         <height>111</height>
        </rect>
@@ -526,9 +565,9 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>30</y>
+        <y>10</y>
         <width>761</width>
-        <height>180</height>
+        <height>171</height>
        </rect>
       </property>
       <property name="title">

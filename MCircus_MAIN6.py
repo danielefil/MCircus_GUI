@@ -4,8 +4,7 @@ from pathlib import Path
 import sys
 
 ## USER DEFINED LIBRARIES ##
-# GUI layout
-#import MassCircus_GUI_6
+#from rawlib import *
 # Molecule class (for MM calculation) 
 import molecule
 import element
@@ -18,9 +17,14 @@ class RawFilterDialog(QDialog):
         super(RawFilterDialog, self).__init__(parent) # Call the inherited classes __init__ method
         uic.loadUi('RawFilter.ui', self) # Load the .ui file
         self.setWindowTitle("Filter Selector")
-
+        self.comboBox.currentIndexChanged.connect(self.selectionchange)
         self.passlista = lista
-        self.comboBox.addItems(self.passlista)
+    
+    def selectionchange(self):
+        #self.comboBox.addItems(self.passlista)
+        print('ciao')
+         ###self.comboBox_2.addItems(self.passlista2)
+
 
 class Ui(QtWidgets.QMainWindow):
     def __init__(self):   
@@ -28,9 +32,8 @@ class Ui(QtWidgets.QMainWindow):
         uic.loadUi('MassCircus_GUI_6.ui', self) # Load the .ui file
         self.show() # Show the GUI
 
-        #self.grey_components()
+        self.grey_components()
         self.enable_connection()
-        
         # GLOBAL VARIABLES
         self.Spectralist = []
         self.fileext = None
@@ -42,9 +45,12 @@ class Ui(QtWidgets.QMainWindow):
         #self.ppm_tolletance = self.ppm_spinbox.value()
         #self.da_tolletance = self.dalton_spinbox.value()
         #self.search_mode = ""
-    '''
+    
     # DISABLE ELEMENTS
     def grey_components(self):
+        self.tabWidget.setTabEnabled(1, False)
+        self.tabWidget.setTabEnabled(2, False)
+        self.tabWidget.setTabEnabled(3, False)
         #self.gBPositive.setEnabled(False)
         #self.gBNegative.setEnabled(False)
         #self.create_button.setEnabled(False)
@@ -52,7 +58,7 @@ class Ui(QtWidgets.QMainWindow):
         #self.ppm_spinbox.setEnabled(False)
         #self.dalton_spinbox.setEnabled(False)
         #self.gBFilter.setEnabled(False)
-    '''
+    
 
     # CONNECTIONS
     def enable_connection(self):
@@ -60,6 +66,10 @@ class Ui(QtWidgets.QMainWindow):
         self.csv_rdbtn.toggled.connect(self.fileextension)
         self.raw_rdbtn.toggled.connect(self.fileextension)
         self.mzML_rdbtn.toggled.connect(self.fileextension)
+        self.Next1_btn.clicked.connect(self.next)
+        self.Next2_btn.clicked.connect(self.next)
+        self.Next3_btn.clicked.connect(self.next)
+        #self.Next1_btn.clicked.connect(self.next)
         #self.ui.Positive_radio.toggled.connect(self.Enable_Adducts_Selector)
         #self.ui.Negative_radio.toggled.connect(self.Enable_Adducts_Selector)
         #self.ui.ppm_radio.toggled.connect(self.Enable_Finder_Selector)
@@ -69,6 +79,20 @@ class Ui(QtWidgets.QMainWindow):
         #self.ui.openDB_button.clicked.connect(self.openDatabaseDialog)
         #self.ui.find_button.clicked.connect(self.finder)
     
+    
+    def next(self):
+       currentTab = self.tabWidget.currentIndex()
+       print(currentTab)
+       self.tabWidget.setTabEnabled(currentTab+1, True)
+       self.tabWidget.setCurrentIndex(currentTab+1) 
+    
+    '''
+    def prev(self):
+       currentTab = self.tabWidget.currentIndex()
+       print(currentTab)
+       self.tabWidget.setTabEnabled(currentTab-1, True)
+       self.tabWidget.setCurrentIndex(1) 
+    '''
     # FILES TYPE SELECTOR 
 
     def fileextension(self):
@@ -93,11 +117,11 @@ class Ui(QtWidgets.QMainWindow):
         
             for _file in self.SpectraPath.glob(self.fileext):
                 self.Spectralist.append(_file)
-            list1 = ['1','2','3']
             #print(self.Spectralist)   ## FOR DEBUG
             if self.fileext == '*.raw':
                 ## scrivere funzione per la selezione dei filtri
-                dlg = RawFilterDialog(list1)
+                _filenames = [i.stem for i in self.Spectralist]
+                dlg = RawFilterDialog(list(map(str, _filenames)))
                 dlg.exec()
 
 '''
