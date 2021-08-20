@@ -1,5 +1,4 @@
 import numpy as np
-
 from re import findall
 from element import Element
 from typing import List, Tuple

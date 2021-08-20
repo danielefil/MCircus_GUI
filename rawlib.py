@@ -1,8 +1,8 @@
-import pandas as pd
-import sys, os
+
+import pythoncom
+pythoncom.CoInitialize()
 import clr
 #from System import *
-
 
 clr.AddReference('System.Collections')
 clr.AddReference('RawReader_dll/ThermoFisher.CommonCore.Data')
@@ -15,12 +15,13 @@ from ThermoFisher.CommonCore.Data import Extensions
 from ThermoFisher.CommonCore.Data.Business import Device
 from ThermoFisher.CommonCore.Data.Interfaces import IScanFilter
 from ThermoFisher.CommonCore.RawFileReader import RawFileReaderAdapter
-#from System.Collections import *
 
 
-# FOR DEBUG 
 
+# function
 def getScanFilter(rawfile):
+
+    #from System.Collections import *
     # Create the IRawDataPlus object for accessing the RAW file
     _rawFile = RawFileReaderAdapter.FileFactory(rawfile)
     _rawFile.SelectInstrument(Device.MS, 1)
@@ -28,7 +29,6 @@ def getScanFilter(rawfile):
     # Get the first and last scan from the RAW file
     firstScanNumber = _rawFile.RunHeaderEx.FirstSpectrum
     lastScanNumber = _rawFile.RunHeaderEx.LastSpectrum
-
 
     FilterList = []
     for i in range(firstScanNumber, lastScanNumber+1):
@@ -40,10 +40,9 @@ def getScanFilter(rawfile):
     return(FilterList)
 
 
-
 ###################
 #### FOR DEBUG ####
 ###################
 
 
-#getScanFilter(r'C:/Users/df426/Desktop/RawReader_Py/GSH_NEM_Full_Scan_60K_FTMS.raw')
+#print(getScanFilter(r'C:/Users/df426/Desktop/RawReader_Py/GSH_NEM_Full_Scan_60K_FTMS.raw'))

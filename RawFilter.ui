@@ -7,17 +7,17 @@
     <x>0</x>
     <y>0</y>
     <width>354</width>
-    <height>434</height>
+    <height>126</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="SetFilter_btn">
    <property name="geometry">
     <rect>
      <x>270</x>
-     <y>80</y>
+     <y>90</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -26,11 +26,11 @@
     <string>Select</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="comboBox">
+  <widget class="QComboBox" name="SP_CBox">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>80</y>
+     <y>40</y>
      <width>231</width>
      <height>22</height>
     </rect>
@@ -39,24 +39,37 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>30</x>
+     <x>20</x>
      <y>20</y>
+     <width>91</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Spectra file</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="Filter_CBox">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>90</y>
+     <width>231</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>70</y>
      <width>47</width>
      <height>13</height>
     </rect>
    </property>
    <property name="text">
-    <string>Filter list</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="comboBox_2">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>50</y>
-     <width>231</width>
-     <height>22</height>
-    </rect>
+    <string>Filter</string>
    </property>
   </widget>
  </widget>

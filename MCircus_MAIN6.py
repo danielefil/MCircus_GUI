@@ -1,10 +1,13 @@
+import rawlib
+
+
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import QDialog, QMainWindow, QApplication, QFileDialog
 from pathlib import Path
 import sys
 
 ## USER DEFINED LIBRARIES ##
-#from rawlib import *
+
 # Molecule class (for MM calculation) 
 import molecule
 import element
@@ -17,13 +20,29 @@ class RawFilterDialog(QDialog):
         super(RawFilterDialog, self).__init__(parent) # Call the inherited classes __init__ method
         uic.loadUi('RawFilter.ui', self) # Load the .ui file
         self.setWindowTitle("Filter Selector")
-        self.comboBox.currentIndexChanged.connect(self.selectionchange)
+        #CONNECTION
+        self.SP_CBox.currentIndexChanged.connect(self.SelectionChange)
+        self.SetFilter_btn.clicked.connect(self.SetFilter)
+        
         self.passlista = lista
+        _filenames = [i.stem for i in lista]
+        
+        #_filenames = [i.stem for i in self.passlista]
+        self.SP_CBox.addItems(_filenames)
+
     
-    def selectionchange(self):
-        #self.comboBox.addItems(self.passlista)
-        print('ciao')
-         ###self.comboBox_2.addItems(self.passlista2)
+    def SelectionChange(self):
+        selectedSpectraIndex = self.SP_CBox.currentIndex()
+        Filterlist = rawlib.getScanFilter(str(self.passlista[selectedSpectraIndex]))
+        self.Filter_CBox.clear()
+        self.Filter_CBox.addItems(Filterlist)
+
+
+    def SetFilter(self):
+        self.selectedFilter = self.Filter_CBox.currentText()
+        print(self.selectedFilter)
+        self.close()
+
 
 
 class Ui(QtWidgets.QMainWindow):
@@ -37,11 +56,13 @@ class Ui(QtWidgets.QMainWindow):
         # GLOBAL VARIABLES
         self.Spectralist = []
         self.fileext = None
+        self.SpectraPath = ''
+        self.filterValues = [False, 0, 0]
+        
         #self.adducts = []
-        #self.filterValues = [False, 0, 0]
         #self.carica = 0
         #self.DB_path = ""
-        #self.SP_path = ""
+
         #self.ppm_tolletance = self.ppm_spinbox.value()
         #self.da_tolletance = self.dalton_spinbox.value()
         #self.search_mode = ""
@@ -51,13 +72,15 @@ class Ui(QtWidgets.QMainWindow):
         self.tabWidget.setTabEnabled(1, False)
         self.tabWidget.setTabEnabled(2, False)
         self.tabWidget.setTabEnabled(3, False)
+
+        self.gBFilter.setEnabled(False)
+
         #self.gBPositive.setEnabled(False)
         #self.gBNegative.setEnabled(False)
         #self.create_button.setEnabled(False)
         #self.find_button.setEnabled(False)
         #self.ppm_spinbox.setEnabled(False)
         #self.dalton_spinbox.setEnabled(False)
-        #self.gBFilter.setEnabled(False)
     
 
     # CONNECTIONS
@@ -66,25 +89,26 @@ class Ui(QtWidgets.QMainWindow):
         self.csv_rdbtn.toggled.connect(self.fileextension)
         self.raw_rdbtn.toggled.connect(self.fileextension)
         self.mzML_rdbtn.toggled.connect(self.fileextension)
-        self.Next1_btn.clicked.connect(self.next)
+        self.Next1_btn.clicked.connect(self.next, )
         self.Next2_btn.clicked.connect(self.next)
         self.Next3_btn.clicked.connect(self.next)
-        #self.Next1_btn.clicked.connect(self.next)
+        self.cBFilter.toggled.connect(self.Enable_Filtering)
         #self.ui.Positive_radio.toggled.connect(self.Enable_Adducts_Selector)
         #self.ui.Negative_radio.toggled.connect(self.Enable_Adducts_Selector)
         #self.ui.ppm_radio.toggled.connect(self.Enable_Finder_Selector)
         #self.ui.dalton_radio.toggled.connect(self.Enable_Finder_Selector)
-        #self.ui.cBFilter.toggled.connect(self.Enable_Filtering)
         #self.ui.create_button.clicked.connect(self.charge_selector)
         #self.ui.openDB_button.clicked.connect(self.openDatabaseDialog)
         #self.ui.find_button.clicked.connect(self.finder)
     
     
-    def next(self):
-       currentTab = self.tabWidget.currentIndex()
-       print(currentTab)
-       self.tabWidget.setTabEnabled(currentTab+1, True)
-       self.tabWidget.setCurrentIndex(currentTab+1) 
+    def next(self, ):
+        if self.SpectraPath == '':    
+            QtWidgets.QMessageBox.warning(self, "Warning", "Select spectra folder to continue")
+        else:    
+            currentTab = self.tabWidget.currentIndex()
+            self.tabWidget.setTabEnabled(currentTab+1, True)
+            self.tabWidget.setCurrentIndex(currentTab+1) 
     
     '''
     def prev(self):
@@ -106,7 +130,7 @@ class Ui(QtWidgets.QMainWindow):
     # OPEN FILES DIALOG - SPECTRA (MULTIPLE)
     def openSpectraDialog(self):
         if self.fileext == None:
-            QtWidgets.QMessageBox.warning(self, "Warning", "Select imput file type")
+            QtWidgets.QMessageBox.warning(self, "Warning", "Select input file type")
         else:
             options = QFileDialog.Options()
             options |= QFileDialog.DontUseNativeDialog
@@ -115,16 +139,17 @@ class Ui(QtWidgets.QMainWindow):
                 self.SP_line.setText(self.SP_folderPath)
                 self.SpectraPath = Path(self.SP_folderPath)
         
-            for _file in self.SpectraPath.glob(self.fileext):
-                self.Spectralist.append(_file)
-            #print(self.Spectralist)   ## FOR DEBUG
-            if self.fileext == '*.raw':
-                ## scrivere funzione per la selezione dei filtri
-                _filenames = [i.stem for i in self.Spectralist]
-                dlg = RawFilterDialog(list(map(str, _filenames)))
-                dlg.exec()
+                for _file in self.SpectraPath.glob(self.fileext):
+                    self.Spectralist.append(_file)
+                #print(self.Spectralist)   ## FOR DEBUG
+                if self.fileext == '*.raw':
+                    ## scrivere funzione per la selezione dei filtri
+                    #_filenames = [i.stem for i in self.Spectralist]
+                    #dlg = RawFilterDialog(list(map(str, _filenames)))
+                    dlg = RawFilterDialog(self.Spectralist)
+                    dlg.exec()
 
-'''
+    '''
         # ENABLE/DISABLE +/- ADDUCTOR SELECTOR
     def Enable_Adducts_Selector(self):
         if self.ui.Positive_radio.isChecked():
@@ -135,15 +160,16 @@ class Ui(QtWidgets.QMainWindow):
             self.ui.gBPositive.setEnabled(False)
             self.ui.gBNegative.setEnabled(True)
             self.ui.create_button.setEnabled(True)
-
+    '''
     def Enable_Filtering(self):
-        if self.ui.cBFilter.isChecked():
-            self.ui.gBFilter.setEnabled(True)
+        if self.cBFilter.isChecked():
+            self.gBFilter.setEnabled(True)
             self.filterValues[0] = True
         else:
-            self.ui.gBFilter.setEnabled(False)
+            self.gBFilter.setEnabled(False)
             self.filterValues[0] = False
 
+'''
         # ENABLE/DISABLE PPM/DALTON SEARCH MODE
     def Enable_Finder_Selector(self):
         if self.ui.ppm_radio.isChecked():
