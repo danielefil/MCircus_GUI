@@ -42,6 +42,17 @@ class RawFilterDialog(QDialog):
         self.close()
 
 
+class IsoPatternOptions(QDialog):
+    def __init__(self, parent=None):
+        # Call the inherited classes __init__ method
+        super(IsoPatternOption, self).__init__(parent)
+        uic.loadUi('IsoPatternOptions.ui', self)  # Load the .ui file
+        self.setWindowTitle("Isotopic Pattern Calculator Options")
+        
+        #CONNECTION
+        
+
+
 
 class Ui(QtWidgets.QMainWindow):
     def __init__(self):   
@@ -118,7 +129,6 @@ class Ui(QtWidgets.QMainWindow):
        self.tabWidget.setCurrentIndex(1) 
     '''
     # FILES TYPE SELECTOR 
-
     def fileextension(self):
         if self.csv_rdbtn.isChecked() == True:
             self.fileext = '*.csv'
@@ -149,8 +159,22 @@ class Ui(QtWidgets.QMainWindow):
                     dlg = RawFilterDialog(self.Spectralist)
                     dlg.exec()
 
+    
+    # ENABLE/DISABLE +/- FIND METHOD
+    def Enable_Adducts_Selector(self):
+        if self.Positive_radio.isChecked():
+            self.gBPositive.setEnabled(True)
+            self.gBNegative.setEnabled(False)
+            self.create_button.setEnabled(True)
+        else:
+            self.gBPositive.setEnabled(False)
+            self.gBNegative.setEnabled(True)
+            self.create_button.setEnabled(True)
+    
+
+
     '''
-        # ENABLE/DISABLE +/- ADDUCTOR SELECTOR
+    # ENABLE/DISABLE +/- ADDUCTOR SELECTOR
     def Enable_Adducts_Selector(self):
         if self.ui.Positive_radio.isChecked():
             self.ui.gBPositive.setEnabled(True)
@@ -161,6 +185,7 @@ class Ui(QtWidgets.QMainWindow):
             self.ui.gBNegative.setEnabled(True)
             self.ui.create_button.setEnabled(True)
     '''
+
     def Enable_Filtering(self):
         if self.cBFilter.isChecked():
             self.gBFilter.setEnabled(True)

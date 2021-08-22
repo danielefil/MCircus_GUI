@@ -48,7 +48,7 @@ def Multinomial_coeff(combination):
 ####################################################################################
 
 
-def generate_output(raw_weights, raw_ratios, charge: int):
+def generate_output(raw_weights, raw_ratios, charge: int, MinIntesity: float):
     raw_weights = np.reshape(raw_weights, (np.size(raw_weights), 1))
     raw_ratios = np.reshape(raw_ratios, (np.size(raw_ratios), 1))
 
@@ -62,8 +62,8 @@ def generate_output(raw_weights, raw_ratios, charge: int):
     # Sorting on m/z small -> large
     out = out[out[:, 1].argsort()]
     out = out[::-1]
-    #elimino le intensita' minori di 0.00001 --> 10^-5 volte piu piccole rispetto al principale
-    out = out[np.where(out[:,1] >= 0.00001)]
+    #elimino le intensita' minori di MinIntesity ~ 0.00001 --> 10^-5 volte piu piccole rispetto al principale
+    out = out[np.where(out[:,1] >= MinIntesity)]
     return(out)
     
 
@@ -113,7 +113,7 @@ def calcolatore(Isotopic_ratio, Isotopic_weight, combination):
 #################################################
 
 
-def Patter_Calculator(molecola: str, charge: int, merge_threshold, ratio_threshold):
+def Patter_Calculator(molecola: str, charge: int, MinIntesity, merge_threshold, ratio_threshold):
     w, r, a = Generate_molecule(molecola)
     ratio, weight = [], []
 
@@ -140,7 +140,7 @@ def Patter_Calculator(molecola: str, charge: int, merge_threshold, ratio_thresho
         raw_weights = np.add.outer(raw_weights, weight[index2+1])
         raw_ratios = np.outer(raw_ratios, ratio[index2+1])
 
-    New_Output = generate_output(raw_weights, raw_ratios, charge)
+    New_Output = generate_output(raw_weights, raw_ratios, charge, MinIntesity)
     Filtered = PatternFilter(New_Output, merge_threshold, ratio_threshold)  
 
     return Filtered

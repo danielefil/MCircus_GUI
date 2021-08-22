@@ -1,6 +1,6 @@
 
-import pythoncom
-pythoncom.CoInitialize()
+#import pythoncom
+#pythoncom.CoInitialize()
 import clr
 #from System import *
 
