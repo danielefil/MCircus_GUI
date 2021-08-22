@@ -45,7 +45,7 @@ class RawFilterDialog(QDialog):
 class IsoPatternOptions(QDialog):
     def __init__(self, parent=None):
         # Call the inherited classes __init__ method
-        super(IsoPatternOption, self).__init__(parent)
+        super(IsoPatternOptions, self).__init__(parent)
         uic.loadUi('IsoPatternOptions.ui', self)  # Load the .ui file
         self.setWindowTitle("Isotopic Pattern Calculator Options")
         
@@ -86,6 +86,9 @@ class Ui(QtWidgets.QMainWindow):
 
         self.gBFilter.setEnabled(False)
 
+        self.gBox_EC.setEnabled(False)
+        self.gBox_DB.setEnabled(False)
+
         #self.gBPositive.setEnabled(False)
         #self.gBNegative.setEnabled(False)
         #self.create_button.setEnabled(False)
@@ -104,6 +107,12 @@ class Ui(QtWidgets.QMainWindow):
         self.Next2_btn.clicked.connect(self.next)
         self.Next3_btn.clicked.connect(self.next)
         self.cBFilter.toggled.connect(self.Enable_Filtering)
+        self.EC_radio.toggled.connect(self.Enable_SearchMtd_Selector)
+        self.DB_radio.toggled.connect(self.Enable_SearchMtd_Selector)
+        
+        self.EC_Open_btn.clicked.connect(self.openElementalComp_Dialog)
+        self.DB_Open_btn.clicked.connect(self.openDatabase_Dialog)
+        
         #self.ui.Positive_radio.toggled.connect(self.Enable_Adducts_Selector)
         #self.ui.Negative_radio.toggled.connect(self.Enable_Adducts_Selector)
         #self.ui.ppm_radio.toggled.connect(self.Enable_Finder_Selector)
@@ -161,15 +170,14 @@ class Ui(QtWidgets.QMainWindow):
 
     
     # ENABLE/DISABLE +/- FIND METHOD
-    def Enable_Adducts_Selector(self):
-        if self.Positive_radio.isChecked():
-            self.gBPositive.setEnabled(True)
-            self.gBNegative.setEnabled(False)
-            self.create_button.setEnabled(True)
+    def Enable_SearchMtd_Selector(self):
+        if self.EC_radio.isChecked():
+            self.gBox_EC.setEnabled(True)
+            self.gBox_DB.setEnabled(False)
         else:
-            self.gBPositive.setEnabled(False)
-            self.gBNegative.setEnabled(True)
-            self.create_button.setEnabled(True)
+            self.gBox_EC.setEnabled(False)
+            self.gBox_DB.setEnabled(True)
+
     
 
 
@@ -193,6 +201,12 @@ class Ui(QtWidgets.QMainWindow):
         else:
             self.gBFilter.setEnabled(False)
             self.filterValues[0] = False
+
+    def openElementalComp_Dialog(self):
+        pass
+
+    def openDatabase_Dialog(self):
+        pass
 
 '''
         # ENABLE/DISABLE PPM/DALTON SEARCH MODE
