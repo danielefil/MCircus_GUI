@@ -1,8 +1,9 @@
+import platform
+if platform.system() == 'Windows':
+    import pythoncom
+    pythoncom.CoInitialize()
 
-#import pythoncom
-#pythoncom.CoInitialize()
 import clr
-#from System import *
 
 clr.AddReference('System.Collections')
 clr.AddReference('RawReader_dll/ThermoFisher.CommonCore.Data')
@@ -43,6 +44,5 @@ def getScanFilter(rawfile):
 ###################
 #### FOR DEBUG ####
 ###################
-
 
 #print(getScanFilter(r'C:/Users/df426/Desktop/RawReader_Py/GSH_NEM_Full_Scan_60K_FTMS.raw'))
