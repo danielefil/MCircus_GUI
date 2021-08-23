@@ -69,7 +69,7 @@ class Ui(QtWidgets.QMainWindow):
         self.fileext = None
         self.SpectraPath = ''
         self.NoiseFilterParams = [False, 0, 0]
-        self.FindMethod = ['', '', 0]
+        self.FindMethod = []
         
         #self.adducts = []
         #self.carica = 0
@@ -85,7 +85,6 @@ class Ui(QtWidgets.QMainWindow):
 
         self.gBox_NoiseFilter.setEnabled(False)
 
-        #self.gBox_EC.setEnabled(False)
         self.gBox_DB.setEnabled(False)
 
         #self.gBPositive.setEnabled(False)
@@ -103,20 +102,20 @@ class Ui(QtWidgets.QMainWindow):
         self.csv_rdbtn.toggled.connect(self.fileextension)
         self.raw_rdbtn.toggled.connect(self.fileextension)
         self.mzML_rdbtn.toggled.connect(self.fileextension)
-        self.Next1_btn.clicked.connect(self.nextTab)
+        self.Next1_btn.clicked.connect(self.nextTab1_2)
         
         #TAB 2 - NOISE FILTER
         self.EnableFilter_cbtn.toggled.connect(self.Enable_Filtering)
-        self.Next2_btn.clicked.connect(self.nextTab)
+        self.Next2_btn.clicked.connect(self.nextTab2_3)
         self.Next2_btn.clicked.connect(self.GetFilterParams)
         
         #TAB 3 - FIND METHOD
         self.EC_radio.toggled.connect(self.Enable_SearchMtd_Selector)
         self.DB_radio.toggled.connect(self.Enable_SearchMtd_Selector)
-        self.EC_Open_btn.clicked.connect(self.openTest_Dialog)
-        self.DB_Open_btn.clicked.connect(self.openTest_Dialog)
-        self.Next3_btn.clicked.connect(self.nextTab)
-        self.Next3_btn.clicked.connect(self.GetSearchMtd)
+        self.EC_Open_btn.clicked.connect(self.openDataBaseDialog)
+        self.DB_Open_btn.clicked.connect(self.openDataBaseDialog)
+        self.Next3_btn.clicked.connect(self.nextTab3_4)
+        #self.Next3_btn.clicked.connect(self.GetSearchMtd)
 
         #TAB 4 - SEARCH OPTIONS      
         #self.Positive_radio.toggled.connect(self.Enable_Adducts_Selector)
@@ -128,14 +127,26 @@ class Ui(QtWidgets.QMainWindow):
         #self.find_button.clicked.connect(self.finder)
     
     
-    def nextTab(self, ):
+    def nextTab1_2(self):
         if self.SpectraPath == '':    
             QtWidgets.QMessageBox.warning(self, "Warning", "Select spectra folder to continue")
         else:    
             currentTab = self.tabWidget.currentIndex()
             self.tabWidget.setTabEnabled(currentTab+1, True)
             self.tabWidget.setCurrentIndex(currentTab+1) 
+    
+    def nextTab2_3(self):
+        currentTab = self.tabWidget.currentIndex()
+        self.tabWidget.setTabEnabled(currentTab+1, True)
+        self.tabWidget.setCurrentIndex(currentTab+1) 
 
+    def nextTab3_4(self):
+        if self.FindMethod == []:
+           QtWidgets.QMessageBox.warning(self, "Warning", "Please select Compounds List or Elemental Composition file")  
+        else:    
+            currentTab = self.tabWidget.currentIndex()
+            self.tabWidget.setTabEnabled(currentTab+1, True)
+            self.tabWidget.setCurrentIndex(currentTab+1) 
 
     # FILES TYPE SELECTOR 
     def fileextension(self):
@@ -192,24 +203,23 @@ class Ui(QtWidgets.QMainWindow):
         print(self.NoiseFilterParams)
 
     # OPEN ELEMENTAL COMPOSITION/COMPOUNDS LIST DIALOG
-    def openTest_Dialog(self):
+    def openDataBaseDialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         if self.EC_radio.isChecked():
             files, _ = QFileDialog.getOpenFileNames(self, "Select Elemental Composition file", "", "CSV Files (*.csv);;Text Files (*.txt)", options=options)
             if files:
                 self.EC_line.setText(files[0])
-                self.FindMethod = ['EC', files[0] , 1]
+                self.FindMethod = ['EC', files[0]]
         else:
             files, _ = QFileDialog.getOpenFileNames(self, "Select Compounds List file", "", "CSV Files (*.csv);;Text Files (*.txt)", options=options)    
             if files:
                 self.DB_line.setText(files[0])
-                self.FindMethod = ['DB', files[0] ,2]
+                self.FindMethod = ['DB', files[0]]
         print(self.test)
 
     
-    def GetSearchMtd(self):
-        pass
+    
 
 
 
