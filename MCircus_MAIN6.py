@@ -58,20 +58,19 @@ class Ui(QtWidgets.QMainWindow):
     def __init__(self):   
         super(Ui, self).__init__() # Call the inherited classes __init__ method
         uic.loadUi('MassCircus_GUI_6.ui', self) # Load the .ui file
+        
+        # INIT FUNCTIONS
         self.show() # Show the GUI
-
         self.grey_components()
         self.enable_connection()
+        
         # GLOBAL VARIABLES
         self.Spectralist = []
         self.fileext = None
         self.SpectraPath = ''
-        self.filterValues = [False, 0, 0]
-        self.search_mode = ''
+        self.NoiseFilterParams = [False, 0, 0]
+        self.FindMethod = ['', '', 0]
         
-        self.DB_file = ''
-        self.EC_file = ''
-
         #self.adducts = []
         #self.carica = 0
 
@@ -84,9 +83,9 @@ class Ui(QtWidgets.QMainWindow):
         self.tabWidget.setTabEnabled(2, False)
         self.tabWidget.setTabEnabled(3, False)
 
-        self.gBFilter.setEnabled(False)
+        self.gBox_NoiseFilter.setEnabled(False)
 
-        self.gBox_EC.setEnabled(False)
+        #self.gBox_EC.setEnabled(False)
         self.gBox_DB.setEnabled(False)
 
         #self.gBPositive.setEnabled(False)
@@ -99,44 +98,45 @@ class Ui(QtWidgets.QMainWindow):
 
     # CONNECTIONS
     def enable_connection(self):
+        #TAB 1 - INPUT
         self.OpenSP_btn.clicked.connect(self.openSpectraDialog)
         self.csv_rdbtn.toggled.connect(self.fileextension)
         self.raw_rdbtn.toggled.connect(self.fileextension)
         self.mzML_rdbtn.toggled.connect(self.fileextension)
-        self.Next1_btn.clicked.connect(self.next, )
-        self.Next2_btn.clicked.connect(self.next)
-        self.Next3_btn.clicked.connect(self.next)
-        self.cBFilter.toggled.connect(self.Enable_Filtering)
+        self.Next1_btn.clicked.connect(self.nextTab)
+        
+        #TAB 2 - NOISE FILTER
+        self.EnableFilter_cbtn.toggled.connect(self.Enable_Filtering)
+        self.Next2_btn.clicked.connect(self.nextTab)
+        self.Next2_btn.clicked.connect(self.GetFilterParams)
+        
+        #TAB 3 - FIND METHOD
         self.EC_radio.toggled.connect(self.Enable_SearchMtd_Selector)
         self.DB_radio.toggled.connect(self.Enable_SearchMtd_Selector)
-        
-        self.EC_Open_btn.clicked.connect(self.openElementalComp_Dialog)
-        self.DB_Open_btn.clicked.connect(self.openDatabase_Dialog)
-        
-        #self.ui.Positive_radio.toggled.connect(self.Enable_Adducts_Selector)
-        #self.ui.Negative_radio.toggled.connect(self.Enable_Adducts_Selector)
-        #self.ui.ppm_radio.toggled.connect(self.Enable_Finder_Selector)
-        #self.ui.dalton_radio.toggled.connect(self.Enable_Finder_Selector)
-        #self.ui.create_button.clicked.connect(self.charge_selector)
-        #self.ui.openDB_button.clicked.connect(self.openDatabaseDialog)
-        #self.ui.find_button.clicked.connect(self.finder)
+        self.EC_Open_btn.clicked.connect(self.openTest_Dialog)
+        self.DB_Open_btn.clicked.connect(self.openTest_Dialog)
+        self.Next3_btn.clicked.connect(self.nextTab)
+        self.Next3_btn.clicked.connect(self.GetSearchMtd)
+
+        #TAB 4 - SEARCH OPTIONS      
+        #self.Positive_radio.toggled.connect(self.Enable_Adducts_Selector)
+        #self.Negative_radio.toggled.connect(self.Enable_Adducts_Selector)
+        #self.ppm_radio.toggled.connect(self.Enable_Finder_Selector)
+        #self.dalton_radio.toggled.connect(self.Enable_Finder_Selector)
+        #self.create_button.clicked.connect(self.charge_selector)
+        #self.openDB_button.clicked.connect(self.openDatabaseDialog)
+        #self.find_button.clicked.connect(self.finder)
     
     
-    def next(self, ):
+    def nextTab(self, ):
         if self.SpectraPath == '':    
             QtWidgets.QMessageBox.warning(self, "Warning", "Select spectra folder to continue")
         else:    
             currentTab = self.tabWidget.currentIndex()
             self.tabWidget.setTabEnabled(currentTab+1, True)
             self.tabWidget.setCurrentIndex(currentTab+1) 
-    
-    '''
-    def prev(self):
-       currentTab = self.tabWidget.currentIndex()
-       print(currentTab)
-       self.tabWidget.setTabEnabled(currentTab-1, True)
-       self.tabWidget.setCurrentIndex(1) 
-    '''
+
+
     # FILES TYPE SELECTOR 
     def fileextension(self):
         if self.csv_rdbtn.isChecked() == True:
@@ -153,7 +153,7 @@ class Ui(QtWidgets.QMainWindow):
         else:
             options = QFileDialog.Options()
             options |= QFileDialog.DontUseNativeDialog
-            self.SP_folderPath = QFileDialog.getExistingDirectory()
+            self.SP_folderPath = QFileDialog.getExistingDirectory(self, options=options)
             if self.SP_folderPath:
                 self.SP_line.setText(self.SP_folderPath)
                 self.SpectraPath = Path(self.SP_folderPath)
@@ -162,146 +162,58 @@ class Ui(QtWidgets.QMainWindow):
                     self.Spectralist.append(_file)
                 #print(self.Spectralist)   ## FOR DEBUG
                 if self.fileext == '*.raw':
-                    ## scrivere funzione per la selezione dei filtri
-                    #_filenames = [i.stem for i in self.Spectralist]
-                    #dlg = RawFilterDialog(list(map(str, _filenames)))
+                    # Apro finestra per selezione dei filtri
                     dlg = RawFilterDialog(self.Spectralist)
                     dlg.exec()
 
     
-    # ENABLE/DISABLE +/- FIND METHOD
+    # ENABLE/DISABLE SEARCH METHOD --> ELEMENTAL COMPOSITION/COMPOUNDS LIST
     def Enable_SearchMtd_Selector(self):
         if self.EC_radio.isChecked():
             self.gBox_EC.setEnabled(True)
             self.gBox_DB.setEnabled(False)
+            self.DB_line.clear()
         else:
             self.gBox_EC.setEnabled(False)
             self.gBox_DB.setEnabled(True)
-
+            self.EC_line.clear()
     
-
-
-    '''
-    # ENABLE/DISABLE +/- ADDUCTOR SELECTOR
-    def Enable_Adducts_Selector(self):
-        if self.ui.Positive_radio.isChecked():
-            self.ui.gBPositive.setEnabled(True)
-            self.ui.gBNegative.setEnabled(False)
-            self.ui.create_button.setEnabled(True)
-        else:
-            self.ui.gBPositive.setEnabled(False)
-            self.ui.gBNegative.setEnabled(True)
-            self.ui.create_button.setEnabled(True)
-    '''
-
+    # ENABLE/DISABLE NOISE FILTERING
     def Enable_Filtering(self):
-        if self.cBFilter.isChecked():
-            self.gBFilter.setEnabled(True)
-            self.filterValues[0] = True
+        if self.EnableFilter_cbtn.isChecked():
+            self.gBox_NoiseFilter.setEnabled(True)
         else:
-            self.gBFilter.setEnabled(False)
-            self.filterValues[0] = False
-
-    def openElementalComp_Dialog(self):
-        pass
-
-    def openDatabase_Dialog(self):
-        pass
-
-'''
-        # ENABLE/DISABLE PPM/DALTON SEARCH MODE
-    def Enable_Finder_Selector(self):
-        if self.ui.ppm_radio.isChecked():
-            self.ui.ppm_spinbox.setEnabled(True)
-            self.ui.dalton_spinbox.setEnabled(False)
-            self.ui.find_button.setEnabled(True)
-            self.search_mode = "ppm"
-        else:
-            self.ui.ppm_spinbox.setEnabled(False)
-            self.ui.dalton_spinbox.setEnabled(True)
-            self.ui.find_button.setEnabled(True)
-            self.search_mode = "dalton"
-
-
-    def charge_selector(self):
-        if self.ui.Positive_radio.isChecked():
-            self.positive_adducts_creator()
-        else:
-            self.negative_adducts_creator()
-
-        # NEGATIVE ADDUCT LIST CREATOR
-    def negative_adducts_creator(self):
-        self.addotti = []
-        self.addotti_label = []
-        if self.ui.cBFormiato.isChecked():
-            self.addotti.append("HCOO")
-            self.addotti_label.append("+fo(-)")
-        if self.ui.cBAcetato.isChecked():
-            self.addotti.append("C2H3O2")
-            self.addotti_label.append("+ac(-)")
-        if self.ui.cBCloro.isChecked():
-            self.addotti.append("Cl")
-            self.addotti_label.append("+Cl(-)")
-        if self.ui.cBProtone_neg.isChecked():
-            self.addotti.append("Hp")
-            self.addotti_label.append("-H(+)")
-        self.carica = -int(self.ui.charge_number_comboBox.currentText())
-        # MESSAGGIO OPERAZIONE COMPLETATA
-        QtWidgets.QMessageBox.about(self, "Message", "Adducts list Created")
-
-        # POSITIVE ADDUCT LIST CREATOR
-    def positive_adducts_creator(self):
-        self.addotti = []
-        self.addotti_label = []
-        if self.ui.cBPotassio.isChecked():
-            self.addotti.append("K")
-            self.addotti_label.append("+K(+)")
-        if self.ui.cBSodio.isChecked():
-            self.addotti.append("Na")
-            self.addotti_label.append("+Na(+)")
-        if self.ui.cBAmmonio.isChecked():
-            self.addotti.append("NH4")
-            self.addotti_label.append("+am(+)")
-        if self.ui.cBProtone.isChecked():
-            self.addotti.append("H")
-            self.addotti_label.append("+H(+)")
-        self.carica = int(self.ui.charge_number_comboBox.currentText())
-        # MESSAGGIO OPERAZIONE COMPLETATA
-        QtWidgets.QMessageBox.about(self, "Message", "Adducts list Created")
+            self.gBox_NoiseFilter.setEnabled(False)
     
-        # OPEN FILES DIALOG - DATABASE
-    def openDatabaseDialog(self):
+    # GET NOISE FILTER PARAMETERS
+    def GetFilterParams(self):
+        if self.EnableFilter_cbtn.isChecked():
+            self.NoiseFilterParams = [True, self.IntensePerc_spinbox.value(), self.BreakCount_spinbox.value()]
+        print(self.NoiseFilterParams)
+
+    # OPEN ELEMENTAL COMPOSITION/COMPOUNDS LIST DIALOG
+    def openTest_Dialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        files, _ = QFileDialog.getOpenFileNames(self, "Select database file", "", "All Files (*);;Text Files (*.txt)", options=options)
-        if files:
-            self.ui.DB_line.setText(files[0])
-            self.DB_path = files[0]
-
-
-
-        # FINDER
-    def finder(self):
-        self.filterValues[1] = self.ui.IntensePerc_spinbox.value()
-        self.filterValues[2] = self.ui.BreakCount_spinbox.value()
-        self.ppm_tolletance = self.ui.ppm_spinbox.value()
-        self.da_tolletance = self.ui.dalton_spinbox.value()
-        if self.search_mode == 'ppm':
-            self.search_property = ['ppm', self.ui.ppm_spinbox.value()]
+        if self.EC_radio.isChecked():
+            files, _ = QFileDialog.getOpenFileNames(self, "Select Elemental Composition file", "", "CSV Files (*.csv);;Text Files (*.txt)", options=options)
+            if files:
+                self.EC_line.setText(files[0])
+                self.FindMethod = ['EC', files[0] , 1]
         else:
-            self.search_property = ['dalton', self.ui.dalton_spinbox.value()]
+            files, _ = QFileDialog.getOpenFileNames(self, "Select Compounds List file", "", "CSV Files (*.csv);;Text Files (*.txt)", options=options)    
+            if files:
+                self.DB_line.setText(files[0])
+                self.FindMethod = ['DB', files[0] ,2]
+        print(self.test)
 
-        if (self.ui.DB_line.text() and self.ui.SP_line.text()) != "":
-            FilesList = []
+    
+    def GetSearchMtd(self):
+        pass
 
-            for CurrentFile in self.files.glob("*.csv"):
-                FilesList.append(CurrentFile)
-            search_peak(FilesList, self.DB_path, self.addotti, self.carica,
-                        self.search_property, self.addotti_label, Filtering=self.filterValues)
-            print('Complete :-)')
-        else:
-            QtWidgets.QMessageBox.warning(self, "Warning", "Input files are missing")          
-'''
+
+
+
 def main():
     # a new app instance
     app = QtWidgets.QApplication(sys.argv)
