@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_1">
      <attribute name="title">
@@ -52,9 +52,9 @@
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>70</y>
+         <y>80</y>
          <width>381</width>
-         <height>90</height>
+         <height>71</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="files_selectro_Layout">
@@ -62,22 +62,22 @@
          <number>0</number>
         </property>
         <property name="horizontalSpacing">
-         <number>20</number>
+         <number>5</number>
         </property>
         <property name="verticalSpacing">
-         <number>6</number>
+         <number>0</number>
         </property>
-        <item row="0" column="2">
+        <item row="1" column="2">
          <widget class="QPushButton" name="OpenSP_btn">
           <property name="text">
            <string>Open</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
+        <item row="1" column="1">
          <widget class="QLineEdit" name="SP_line"/>
         </item>
-        <item row="0" column="0">
+        <item row="0" column="1">
          <widget class="QLabel" name="SP_label">
           <property name="frameShape">
            <enum>QFrame::NoFrame</enum>
@@ -309,7 +309,7 @@
       <property name="checkable">
        <bool>false</bool>
       </property>
-      <widget class="QPushButton" name="EC_Open_btn">
+      <widget class="QPushButton" name="EC_Dialog_btn">
        <property name="geometry">
         <rect>
          <x>30</x>
@@ -322,7 +322,7 @@
         <string>Elemental Composition</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="DB_Open_btn">
+      <widget class="QPushButton" name="DB_Dialog_btn">
        <property name="geometry">
         <rect>
          <x>240</x>

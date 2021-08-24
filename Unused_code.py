@@ -1,51 +1,58 @@
 ############# TRASH BIN #############
 
+        #self.adducts = []
+        #self.carica = 0
+
+        #self.ppm_tolletance = self.ppm_spinbox.value()
+        #self.da_tolletance = self.dalton_spinbox.value()
+
+
+
+        ####self.EC_radio.toggled.connect(self.Enable_SearchMtd_Selector)
+        ####self.DB_radio.toggled.connect(self.Enable_SearchMtd_Selector)
+        ####self.EC_Open_btn.clicked.connect(self.openDataBaseDialog)
+        ####self.DB_Open_btn.clicked.connect(self.openDataBaseDialog)
+        ####self.Next3_btn.clicked.connect(self.nextTab3_4)
+        ####self.Next3_btn.clicked.connect(self.GetSearchMtd)
+
+
+        #TAB 4 - SEARCH OPTIONS      
+        #self.Positive_radio.toggled.connect(self.Enable_Adducts_Selector)
+        #self.Negative_radio.toggled.connect(self.Enable_Adducts_Selector)
+        #self.ppm_radio.toggled.connect(self.Enable_Finder_Selector)
+        #self.dalton_radio.toggled.connect(self.Enable_Finder_Selector)
+        #self.create_button.clicked.connect(self.charge_selector)
+        #self.openDB_button.clicked.connect(self.openDatabaseDialog)
+        #self.find_button.clicked.connect(self.finder)
+
+ 
     
-    # OPEN FILES DIALOG - DATABASE
-    def openElementalComp_Dialog(self):
+    # OPEN ELEMENTAL COMPOSITION/COMPOUNDS LIST DIALOG
+    def openDataBaseDialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        files, _ = QFileDialog.getOpenFileNames(self, "Select Elemental Composition file", "", "CSV Files (*.csv);;Text Files (*.txt)", options=options)
-        if files:
-            self.EC_line.setText(files[0])
-            self.EC_path = files[0]
-            print(self.EC_path)
-        
-    def openDatabase_Dialog(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        files, _ = QFileDialog.getOpenFileNames(self, "Select Compounds List file", "", "CSV Files (*.csv);;Text Files (*.txt)", options=options)
-        if files:
-            self.DB_line.setText(files[0])
-            self.DB_path = files[0]
-    print(self.DB_path)
+        if self.EC_radio.isChecked():
+            files, _ = QFileDialog.getOpenFileNames(self, "Select Elemental Composition file", "", "CSV Files (*.csv);;Text Files (*.txt)", options=options)
+            if files:
+                self.EC_line.setText(files[0])
+                self.FindMethod = ['EC', files[0]]
+        else:
+            files, _ = QFileDialog.getOpenFileNames(self, "Select Compounds List file", "", "CSV Files (*.csv);;Text Files (*.txt)", options=options)    
+            if files:
+                self.DB_line.setText(files[0])
+                self.FindMethod = ['DB', files[0]]
+        print(self.test)
+
+    
+
+
      
 
 
-    # ENABLE/DISABLE +/- ADDUCTOR SELECTOR
-    def Enable_Adducts_Selector(self):
-        if self.ui.Positive_radio.isChecked():
-            self.ui.gBPositive.setEnabled(True)
-            self.ui.gBNegative.setEnabled(False)
-            self.ui.create_button.setEnabled(True)
-        else:
-            self.ui.gBPositive.setEnabled(False)
-            self.ui.gBNegative.setEnabled(True)
-            self.ui.create_button.setEnabled(True)
+
     
 
-        # ENABLE/DISABLE PPM/DALTON SEARCH MODE
-    def Enable_Finder_Selector(self):
-        if self.ui.ppm_radio.isChecked():
-            self.ui.ppm_spinbox.setEnabled(True)
-            self.ui.dalton_spinbox.setEnabled(False)
-            self.ui.find_button.setEnabled(True)
-            self.search_mode = "ppm"
-        else:
-            self.ui.ppm_spinbox.setEnabled(False)
-            self.ui.dalton_spinbox.setEnabled(True)
-            self.ui.find_button.setEnabled(True)
-            self.search_mode = "dalton"
+
 
 
     def charge_selector(self):
