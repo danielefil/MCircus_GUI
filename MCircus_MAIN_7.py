@@ -1,4 +1,4 @@
-import rawlib
+import RawReader_lib
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import QDialog, QMainWindow, QApplication, QFileDialog
 from pathlib import Path
@@ -12,10 +12,12 @@ import molecule
 import element
 # Other functions
 from Search_to_function_isopattern_10 import search_peak
+import Dialog_FormulaFinder
+import Dialog_DBFinder
 
 
 class RawFilterDialog(QDialog):
-    def __init__(self, lista, parent = None):   
+    def __init__(self, FileList, parent = None):   
         super(RawFilterDialog, self).__init__(parent) # Call the inherited classes __init__ method
         uic.loadUi('RawFilter.ui', self) # Load the .ui file
         self.setWindowTitle("Filter Selector")
@@ -23,8 +25,8 @@ class RawFilterDialog(QDialog):
         self.SP_CBox.currentIndexChanged.connect(self.SelectionChange)
         self.SetFilter_btn.clicked.connect(self.SetFilter)
         
-        self.passlista = lista
-        _filenames = [i.stem for i in lista]
+        self.passlista = FileList
+        _filenames = [i.stem for i in FileList]
         
         #_filenames = [i.stem for i in self.passlista]
         self.SP_CBox.addItems(_filenames)
@@ -32,7 +34,7 @@ class RawFilterDialog(QDialog):
     
     def SelectionChange(self):
         selectedSpectraIndex = self.SP_CBox.currentIndex()
-        Filterlist = rawlib.getScanFilter(str(self.passlista[selectedSpectraIndex]))
+        Filterlist = RawReader_lib.getScanFilter(str(self.passlista[selectedSpectraIndex]))
         self.Filter_CBox.clear()
         self.Filter_CBox.addItems(Filterlist)
 
@@ -42,99 +44,6 @@ class RawFilterDialog(QDialog):
         print(self.selectedFilter)
         self.close()
 
-
-##################################################################################################################
-################################ DB_DialogFinder
-
-
-class DB_DialogFinder(QDialog):
-    def __init__(self, lista, parent = None):   
-        super(DB_DialogFinder, self).__init__(parent) # Call the inherited classes __init__ method
-        uic.loadUi('Dialog_ListFinder.ui', self) # Load the .ui file
-        self.setWindowTitle("Compound List Finder")
-
-        
-        #DISABLED
-        self.gBPositive.setEnabled(False)
-        self.gBNegative.setEnabled(False)
-        self.ppm_spinbox.setEnabled(False)
-        self.dalton_spinbox.setEnabled(False)
-        self.find_button.setEnabled(False)
-        self.gBoxCharge.setEnabled(False)
-        self.DB_Create_btn.setEnabled(False)
-
-        #CONNECTION
-        self.DB_Open_btn.clicked.connect(self.openDatabase_Dialog)
-        self.Positive_radio.toggled.connect(self.Enable_Adducts_Selector)
-        self.Negative_radio.toggled.connect(self.Enable_Adducts_Selector)
-        self.ppm_radio.toggled.connect(self.Enable_Finder_Selector)
-        self.dalton_radio.toggled.connect(self.Enable_Finder_Selector)
-        #self.DB_Create_btn.clicked.connect(self.charge_selector)
-        #self.find_button.clicked.connect(self.finder)
-    
-    def openDatabase_Dialog(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        files, _ = QFileDialog.getOpenFileNames(self, "Select Compounds List file", "", "CSV Files (*.csv);;Text Files (*.txt)", options=options)
-        if files:
-            self.DB_line.setText(files[0])
-            self.DB_path = files[0]
-        print(self.DB_path)
-    
-    # ENABLE/DISABLE +/- ADDUCTOR SELECTOR
-    def Enable_Adducts_Selector(self):
-        if self.Positive_radio.isChecked():
-            self.gBPositive.setEnabled(True)
-            self.gBNegative.setEnabled(False)
-            self.DB_Create_btn.setEnabled(True)
-            self.gBoxCharge.setEnabled(True)
-        else:
-            self.gBPositive.setEnabled(False)
-            self.gBNegative.setEnabled(True)
-            self.DB_Create_btn.setEnabled(True)
-            self.gBoxCharge.setEnabled(True)
-
-    # ENABLE/DISABLE PPM/DALTON SEARCH MODE
-    def Enable_Finder_Selector(self):
-        if self.ppm_radio.isChecked():
-            self.ppm_spinbox.setEnabled(True)
-            self.dalton_spinbox.setEnabled(False)
-            self.find_button.setEnabled(True)
-            self.search_mode = "ppm"
-        else:
-            self.ppm_spinbox.setEnabled(False)
-            self.dalton_spinbox.setEnabled(True)
-            self.find_button.setEnabled(True)
-            self.search_mode = "dalton"
-
-################################ DB_DialogFinder
-##################################################################################################################
-
-class EC_DialogFinder(QDialog):
-    def __init__(self, lista, parent = None):   
-        super(EC_DialogFinder, self).__init__(parent) # Call the inherited classes __init__ method
-        uic.loadUi('Dialog_ElementFinder.ui', self) # Load the .ui file
-        self.setWindowTitle("Elemental Composition Finder")
-
-        self.EC_Open_btn.clicked.connect(self.openElementalComp_Dialog)
-
-        # OPEN FILES DIALOG - DATABASE
-    def openElementalComp_Dialog(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        files, _ = QFileDialog.getOpenFileNames(self, "Select Elemental Composition file", "", "CSV Files (*.csv);;Text Files (*.txt)", options=options)
-        if files:
-            self.EC_line.setText(files[0])
-            self.EC_path = files[0]
-            #print(self.EC_path)
-            with open(self.EC_path) as f:
-                reader = csv.reader(f)
-                mylist = list(reader)
-            rowPosition = self.tableWidget.rowCount()
-            self.tableWidget.insertRow(rowPosition)    
-            self.tableWidget.setItem(rowPosition, 0, QtGui.QTextTable('CIAO'))
-
-
 class IsoPatternOptions(QDialog):
     def __init__(self, parent=None):
         # Call the inherited classes __init__ method
@@ -142,8 +51,6 @@ class IsoPatternOptions(QDialog):
         uic.loadUi('IsoPatternOptions.ui', self)  # Load the .ui file
         self.setWindowTitle("Isotopic Pattern Calculator Options")
         
-
-
 
 class Ui(QtWidgets.QMainWindow):
     def __init__(self):   
@@ -249,12 +156,12 @@ class Ui(QtWidgets.QMainWindow):
 
     #OPEN COMPOUNDS LIST SEARCH MODE
     def DB_OpenDialog(self):
-        DB_Dialog = DB_DialogFinder(self.Spectralist)
+        DB_Dialog = Dialog_DBFinder.Ui(self.Spectralist)
         DB_Dialog.exec()
     
     #OPEN ELEMENTAL COMPOSITION SEARCH MODE
     def EC_OpenDialog(self):
-        EC_Dialog = EC_DialogFinder(self.Spectralist)
+        EC_Dialog = Dialog_FormulaFinder.Ui(self.Spectralist)
         EC_Dialog.exec()
     
 

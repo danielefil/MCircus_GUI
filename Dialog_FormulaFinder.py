@@ -2,31 +2,34 @@
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import QDialog, QMainWindow, QApplication, QFileDialog
 from pathlib import Path
-
-
 import sys
 import csv
 from element import Element
 from FormulaFinder_lib import FormulaFinder, FormulaRefiner
 
-class Ui(QtWidgets.QMainWindow):
-    def __init__(self):   
-        super(Ui, self).__init__() # Call the inherited classes __init__ method
+class Ui(QDialog):
+    def __init__(self, FileList, parent = None):   
+        super(Ui, self).__init__(parent) # Call the inherited classes __init__ method
         uic.loadUi('Dialog_FormulaFinder.ui', self) # Load the .ui file
+        self.setWindowTitle("Compound Formula Finder")
         self.show()
-        # INIT FUNCTIONS
-        self.tmpfiles = []
+        
+        # INIT GLOBAL VARIABLES AND OPTIONS
+        self.SpectraList = FileList
         self.tableWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
-        self.EC_Open_btn.clicked.connect(self.openElementalComp_Dialog)
+        #self.tmpfiles = []
+          
+        #DISABLED
         self.Refine_GBox.setEnabled(False)
         self.IsoFinder_GBox.setEnabled(False)
+        self.Option_GBox.setEnabled(False)
+
+        #CONNECTION
+        self.EC_Open_btn.clicked.connect(self.openElementalComp_Dialog)
         self.Search_btn.clicked.connect(self.findCompoundList)
         self.Refine_btn.clicked.connect(self.refineCompoundList)
         self.IsoFind_btn.clicked.connect(self.PatternFinder)
-        self.Option_GBox.setEnabled(False)
-        #for debug
-        self.spectralist = [r'C:\Users\df426\Desktop\AnalisiCromo\Spectra\Part2_2020_7_3_cromoacetato_gallico_1a3_h2o_meoh_1a100_400-2000_NEG.csv']
-    
+
 
     def readTableData(self):
         rowCount = self.tableWidget.rowCount()
@@ -46,8 +49,6 @@ class Ui(QtWidgets.QMainWindow):
             output.append(rowlist)
         return(output)
 
-
-
         
     # OPEN FILES DIALOG - DATABASE
     def openElementalComp_Dialog(self):
@@ -57,7 +58,6 @@ class Ui(QtWidgets.QMainWindow):
         if files:
             self.EC_line.setText(files[0])
             self.EC_path = files[0]
-            #print(self.EC_path)
             with open(self.EC_path) as f:
                 reader = csv.reader(f)
                 mylist = list(reader)
@@ -94,7 +94,7 @@ class Ui(QtWidgets.QMainWindow):
             ppm_diff = self.ppm_SPbox.value()
             atoms = self.readTableData()
             
-            for spectra in self.spectralist:
+            for spectra in self.SpectraList:
                 out = FormulaFinder(spectra, atoms, self.charge, ppm_diff, out)
                 out.to_csv(str(tmp_path)+ '/' + str(Path(spectra).name), index=False)
                 self.tmpfiles.append(str(tmp_path)+ '/' + str(Path(spectra).name))
@@ -133,19 +133,6 @@ class Ui(QtWidgets.QMainWindow):
      
             ppm = self.ppm_SPbox_2.value()
             dalton = self.dalton_SPbox.value()
-            #for spettro, composti in zip(self.spectra, self.tmpfiles2): 
-                #IsoFinder()
-            print(ppm, dalton, self.charge, SearchMode)
-
-
-def main():
-    # a new app instance
-    app = QtWidgets.QApplication(sys.argv)
-    window = Ui()
-    window.setWindowTitle("MASS_CIRCUS - v7.0")
-    # without this, the script exits immediately.
-    sys.exit(app.exec_())
-
-
-if __name__ == "__main__":
-    main()
+            for spettro, composti in zip(self.SpectraList, self.tmpfiles_2): 
+                print(spettro, composti)
+                pass

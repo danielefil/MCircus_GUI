@@ -89,7 +89,6 @@ def FormulaFinder(spectrum_path, atoms, charge, ppm, out):
                 out.append([values[0], values[1], iii[0], iii[1]])
         
     df_output = pd.DataFrame(out, columns=['m/z', 'Intensity' , 'Formula', 'Neutral Mass'])
-    print(df_output)
     return(df_output)
     
 
@@ -100,7 +99,6 @@ def FormulaRefiner(Compounds_path, charge: int, filtri: dict):
     # Controlo che il file dei composti da cercare non sia vuoto
     if len(df_results) == 0:
         # NO, rise Error
-        print('ERROR')
         df_results.to_csv(newname)
     else:
         # OK, posso usare il file
@@ -130,7 +128,6 @@ def FormulaRefiner(Compounds_path, charge: int, filtri: dict):
                 df_results = df_results[(df_results[key + '/C'] >= values[0]) & (df_results[key + '/C'] <= values[1])]
             
             if len(df_results) == 0:
-                print('empty')
                 break
     
         df_results2 = df_results[['Formula', 'm/z']]
