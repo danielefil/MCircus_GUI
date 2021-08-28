@@ -55,51 +55,6 @@
 
 
 
-    def charge_selector(self):
-        if self.ui.Positive_radio.isChecked():
-            self.positive_adducts_creator()
-        else:
-            self.negative_adducts_creator()
-
-        # NEGATIVE ADDUCT LIST CREATOR
-    def negative_adducts_creator(self):
-        self.addotti = []
-        self.addotti_label = []
-        if self.ui.cBFormiato.isChecked():
-            self.addotti.append("HCOO")
-            self.addotti_label.append("+fo(-)")
-        if self.ui.cBAcetato.isChecked():
-            self.addotti.append("C2H3O2")
-            self.addotti_label.append("+ac(-)")
-        if self.ui.cBCloro.isChecked():
-            self.addotti.append("Cl")
-            self.addotti_label.append("+Cl(-)")
-        if self.ui.cBProtone_neg.isChecked():
-            self.addotti.append("Hp")
-            self.addotti_label.append("-H(+)")
-        self.carica = -int(self.ui.charge_number_comboBox.currentText())
-        # MESSAGGIO OPERAZIONE COMPLETATA
-        QtWidgets.QMessageBox.about(self, "Message", "Adducts list Created")
-
-        # POSITIVE ADDUCT LIST CREATOR
-    def positive_adducts_creator(self):
-        self.addotti = []
-        self.addotti_label = []
-        if self.ui.cBPotassio.isChecked():
-            self.addotti.append("K")
-            self.addotti_label.append("+K(+)")
-        if self.ui.cBSodio.isChecked():
-            self.addotti.append("Na")
-            self.addotti_label.append("+Na(+)")
-        if self.ui.cBAmmonio.isChecked():
-            self.addotti.append("NH4")
-            self.addotti_label.append("+am(+)")
-        if self.ui.cBProtone.isChecked():
-            self.addotti.append("H")
-            self.addotti_label.append("+H(+)")
-        self.carica = int(self.ui.charge_number_comboBox.currentText())
-        # MESSAGGIO OPERAZIONE COMPLETATA
-        QtWidgets.QMessageBox.about(self, "Message", "Adducts list Created")
 
 
 

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>840</width>
-    <height>435</height>
+    <height>599</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,7 +35,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Positive Spectra</string>
+     <string>Positive</string>
     </property>
    </widget>
    <widget class="QRadioButton" name="Negative_RBtn">
@@ -54,21 +54,21 @@
      <bool>false</bool>
     </property>
     <property name="text">
-     <string>Negative Spectra</string>
+     <string>Negative</string>
     </property>
    </widget>
    <widget class="QWidget" name="verticalLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>90</x>
       <y>20</y>
-      <width>501</width>
+      <width>561</width>
       <height>141</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
-      <widget class="QGroupBox" name="gBPositive">
+      <widget class="QGroupBox" name="Positive_gBox">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -78,41 +78,48 @@
        <property name="alignment">
         <set>Qt::AlignCenter</set>
        </property>
-       <widget class="QWidget" name="horizontalLayoutWidget">
+       <widget class="QWidget" name="gridLayoutWidget_3">
         <property name="geometry">
          <rect>
           <x>0</x>
           <y>20</y>
-          <width>501</width>
-          <height>31</height>
+          <width>561</width>
+          <height>41</height>
          </rect>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QCheckBox" name="cBProtone">
-           <property name="text">
-            <string>Proton (H+)</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="cBSodio">
-           <property name="text">
-            <string>Sodium (Na+)</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="cBPotassio">
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="0" column="3">
+          <widget class="QCheckBox" name="Potassium_cBtn">
            <property name="text">
             <string>Potassium (K+)</string>
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QCheckBox" name="cBAmmonio">
+         <item row="0" column="4">
+          <widget class="QCheckBox" name="Ammonium_cBtn">
            <property name="text">
             <string>Ammoniun (NH4+)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QCheckBox" name="Mpos_cBtn">
+           <property name="text">
+            <string>M+</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QCheckBox" name="Proton_cBtn">
+           <property name="text">
+            <string>Proton (H+)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QCheckBox" name="Sodium_cBtn">
+           <property name="text">
+            <string>Sodium (Na+)</string>
            </property>
           </widget>
          </item>
@@ -121,7 +128,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="gBNegative">
+      <widget class="QGroupBox" name="Negative_GBox">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -137,38 +144,48 @@
        <property name="checkable">
         <bool>false</bool>
        </property>
-       <widget class="QWidget" name="horizontalLayoutWidget_2">
+       <widget class="QWidget" name="gridLayoutWidget_4">
         <property name="geometry">
          <rect>
           <x>0</x>
           <y>20</y>
-          <width>501</width>
-          <height>31</height>
+          <width>561</width>
+          <height>41</height>
          </rect>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <widget class="QCheckBox" name="cBProtone_neg">
+        <layout class="QGridLayout" name="gridLayout_4" columnstretch="0,0,0,0,0">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetMinimumSize</enum>
+         </property>
+         <item row="0" column="0">
+          <widget class="QCheckBox" name="Mneg_cBtn">
            <property name="text">
-            <string>Proton -(H+)</string>
+            <string>M-</string>
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QCheckBox" name="cBCloro">
-           <property name="text">
-            <string>Cloride (Cl-)</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="cBAcetato">
+         <item row="0" column="3">
+          <widget class="QCheckBox" name="A">
            <property name="text">
             <string>Acetate (CH3COO−)</string>
            </property>
           </widget>
          </item>
-         <item>
+         <item row="0" column="1">
+          <widget class="QCheckBox" name="DeProton_cBtn">
+           <property name="text">
+            <string>Proton -(H+)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QCheckBox" name="Cloride_cBtn">
+           <property name="text">
+            <string>Cloride (Cl-)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="4">
           <widget class="QCheckBox" name="cBFormiato">
            <property name="text">
             <string>Formate (HCOO-)</string>
