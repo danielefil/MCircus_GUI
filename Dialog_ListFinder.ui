@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>840</width>
-    <height>599</height>
+    <width>781</width>
+    <height>410</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QGroupBox" name="Adducts_GBox">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>120</y>
+     <x>10</x>
+     <y>110</y>
      <width>761</width>
      <height>171</height>
     </rect>
@@ -165,7 +165,7 @@
           </widget>
          </item>
          <item row="0" column="3">
-          <widget class="QCheckBox" name="A">
+          <widget class="QCheckBox" name="Acetate_cBtn">
            <property name="text">
             <string>Acetate (CH3COO−)</string>
            </property>
@@ -186,7 +186,7 @@
           </widget>
          </item>
          <item row="0" column="4">
-          <widget class="QCheckBox" name="cBFormiato">
+          <widget class="QCheckBox" name="Formate_cBtn">
            <property name="text">
             <string>Formate (HCOO-)</string>
            </property>
@@ -218,11 +218,11 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QGroupBox" name="Finder_GBox">
+  <widget class="QGroupBox" name="IsoFinder_GBox">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>300</y>
+     <x>10</x>
+     <y>290</y>
      <width>761</width>
      <height>111</height>
     </rect>
@@ -230,10 +230,10 @@
    <property name="title">
     <string>Finder</string>
    </property>
-   <widget class="QPushButton" name="find_button">
+   <widget class="QPushButton" name="IsoFind_Btn">
     <property name="geometry">
      <rect>
-      <x>300</x>
+      <x>340</x>
       <y>40</y>
       <width>113</width>
       <height>32</height>
@@ -246,9 +246,9 @@
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>10</x>
       <y>20</y>
-      <width>221</width>
+      <width>261</width>
       <height>80</height>
      </rect>
     </property>
@@ -261,7 +261,7 @@
       </widget>
      </item>
      <item row="0" column="2">
-      <widget class="QSpinBox" name="ppm_spinbox">
+      <widget class="QSpinBox" name="ppm_SPbox">
        <property name="value">
         <number>20</number>
        </property>
@@ -275,7 +275,7 @@
       </widget>
      </item>
      <item row="1" column="2">
-      <widget class="QDoubleSpinBox" name="dalton_spinbox">
+      <widget class="QDoubleSpinBox" name="dalton_SPbox">
        <property name="decimals">
         <number>4</number>
        </property>
@@ -319,8 +319,8 @@
   <widget class="QGroupBox" name="gBox_SearchMethod">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>20</y>
+     <x>10</x>
+     <y>10</y>
      <width>761</width>
      <height>91</height>
     </rect>
@@ -379,8 +379,8 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>700</x>
-     <y>140</y>
+     <x>670</x>
+     <y>130</y>
      <width>90</width>
      <height>70</height>
     </rect>

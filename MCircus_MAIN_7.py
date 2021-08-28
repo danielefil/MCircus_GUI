@@ -3,13 +3,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import QDialog, QMainWindow, QApplication, QFileDialog
 from pathlib import Path
 import sys
-import csv
 
 ## USER DEFINED LIBRARIES ##
 
-# Molecule class (for MM calculation) 
-import molecule
-import element
+
 # Other functions
 from Search_to_function_isopattern_10 import search_peak
 import Dialog_FormulaFinder
@@ -98,8 +95,6 @@ class Ui(QtWidgets.QMainWindow):
         self.DB_Dialog_btn.clicked.connect(self.DB_OpenDialog)
         self.EC_Dialog_btn.clicked.connect(self.EC_OpenDialog)
 
-
-    
     
     def nextTab(self):
         if self.SpectraPath == '':    

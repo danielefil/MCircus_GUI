@@ -2,10 +2,10 @@
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import QDialog, QMainWindow, QApplication, QFileDialog
 from pathlib import Path
-import sys
 import csv
 from element import Element
 from FormulaFinder_lib import FormulaFinder, FormulaRefiner
+from PatternSearch_lib import PatternSearch
 
 class Ui(QDialog):
     def __init__(self, FileList, parent = None):   
@@ -133,6 +133,7 @@ class Ui(QDialog):
      
             ppm = self.ppm_SPbox_2.value()
             dalton = self.dalton_SPbox.value()
+            ##### ###### LOOP PER CERCARE I COMPOSSTI ###### #######  
             for spettro, composti in zip(self.SpectraList, self.tmpfiles_2): 
+                PatternSearch(FilesList, DB_path, addotti, carica,  search_property, addotti_label, Filtering=filterValues)
                 print(spettro, composti)
-                pass
