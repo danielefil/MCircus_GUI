@@ -233,7 +233,7 @@
    <widget class="QPushButton" name="IsoFind_Btn">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>430</x>
       <y>40</y>
       <width>113</width>
       <height>32</height>
@@ -314,6 +314,19 @@
       </spacer>
      </item>
     </layout>
+   </widget>
+   <widget class="QProgressBar" name="progressBar">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>80</y>
+      <width>251</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>0</number>
+    </property>
    </widget>
   </widget>
   <widget class="QGroupBox" name="gBox_SearchMethod">

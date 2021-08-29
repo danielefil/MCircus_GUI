@@ -4,12 +4,13 @@ from PatternSearch_lib import PatternSearch
 
 
 class Ui(QDialog):
-    def __init__(self, FileList, parent = None):   
+    def __init__(self, FileList, FilterOptions, parent = None):   
         super(Ui, self).__init__(parent) # Call the inherited classes __init__ method
         uic.loadUi("Dialog_ListFinder.ui", self) # Load the .ui file
         self.setWindowTitle("Compound List Finder")
         self.show()
         self.SpectraList = FileList
+        self.FilterProperty = FilterOptions
         
         #DISABLED
         self.Adducts_GBox.setEnabled(False)
@@ -121,8 +122,18 @@ class Ui(QDialog):
                 search_property = [SearchMode, dalton]
     
             ##### ###### LOOP PER CERCARE I COMPOSSTI ###### #######  
+            '''
             for _spectra in self.SpectraList: 
-                PatternSearch(_spectra, self.DB_path, self.adducts, self.charge,  search_property, self.adducts_label, Filtering=[False, 0, 0])
-            
+                PatternSearch(_spectra, self.DB_path, self.adducts, self.charge,  search_property, self.adducts_label, self.FilterProperty)
+            QtWidgets.QMessageBox.information(self, "Info", "Analysis complete!")
             print('Done!!')
-
+            '''
+            self.progressBar.setMaximum(len(self.SpectraList))
+            
+            for index, _spectra in enumerate(self.SpectraList, 1):
+                self.progressBar.reset()
+                self.progressBar.setValue(index)
+                QApplication.processEvents()
+                PatternSearch(_spectra, self.DB_path, self.adducts, self.charge,  search_property, self.adducts_label, self.FilterProperty)
+            QtWidgets.QMessageBox.information(self, "Info", "Analysis complete!")
+            print('Done!!')

@@ -99,10 +99,12 @@ def FormulaRefiner(Compounds_path, charge: int, filtri: dict):
     # Controlo che il file dei composti da cercare non sia vuoto
     if len(df_results) == 0:
         # NO, rise Error
+        print('Zero')
         df_results.to_csv(newname)
     else:
         # OK, posso usare il file
         # pulisco le formule
+        print('OK')
         df_results['Formula'] = df_results['Formula'].apply(cleaner)
         
         
@@ -130,9 +132,9 @@ def FormulaRefiner(Compounds_path, charge: int, filtri: dict):
             if len(df_results) == 0:
                 break
     
-        df_results2 = df_results[['Formula', 'm/z']]
-        df_results2.to_csv(newname, index=False)
-        return(newname)
+    df_results2 = df_results[['Formula', 'm/z']]
+    df_results2.to_csv(newname, index=False)
+    return(newname)
         
 
 ######################################

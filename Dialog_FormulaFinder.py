@@ -8,7 +8,7 @@ from FormulaFinder_lib import FormulaFinder, FormulaRefiner
 from PatternSearch_lib import PatternSearch
 
 class Ui(QDialog):
-    def __init__(self, FileList, parent = None):   
+    def __init__(self, FileList, FilterOptions, parent = None):   
         super(Ui, self).__init__(parent) # Call the inherited classes __init__ method
         uic.loadUi('Dialog_FormulaFinder.ui', self) # Load the .ui file
         self.setWindowTitle("Compound Formula Finder")
@@ -16,8 +16,9 @@ class Ui(QDialog):
         
         # INIT GLOBAL VARIABLES AND OPTIONS
         self.SpectraList = FileList
+        self.FilterProperty = FilterOptions
         self.tableWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
-        #self.tmpfiles = []
+        self.tmpfiles = []
           
         #DISABLED
         self.Refine_GBox.setEnabled(False)
@@ -98,7 +99,11 @@ class Ui(QDialog):
             ppm_diff = self.ppm_SPbox.value()
             atoms = self.readTableData()
             
-            for spectra in self.SpectraList:
+            self.ElFinde_PBar.setMaximum(len(self.SpectraList))
+            for index, spectra in enumerate(self.SpectraList, 1):
+                self.ElFinde_PBar.reset()
+                self.ElFinde_PBar.setValue(index)
+                QApplication.processEvents()
                 out = FormulaFinder(spectra, atoms, self.charge, ppm_diff, out)
                 out.to_csv(str(tmp_path)+ '/' + str(Path(spectra).name), index=False)
                 self.tmpfiles.append(str(tmp_path)+ '/' + str(Path(spectra).name))
@@ -140,6 +145,17 @@ class Ui(QDialog):
                 search_property = [SearchMode, dalton]
     
             ##### ###### LOOP PER CERCARE I COMPOSSTI ###### #######  
+            '''
             for _spectra, _compounds in zip(self.SpectraList, self.tmpfiles_2): 
-                PatternSearch(_spectra, _compounds, self.adducts, self.charge,  search_property, self.adducts_label, Filtering=[False, 0, 0])
+                PatternSearch(_spectra, _compounds, self.adducts, self.charge,  search_property, self.adducts_label, self.FilterProperty)
+            QtWidgets.QMessageBox.information(self, "Info", "Analysis complete!")
             print('Done !!')
+            '''
+            self.IsoFinder_PBar.setMaximum(len(self.SpectraList))
+            for index, (_spectra, _compounds) in enumerate(zip(self.SpectraList, self.tmpfiles_2), 1):
+                self.IsoFinder_PBar.setValue(index)
+                QApplication.processEvents()
+                PatternSearch(_spectra, _compounds, self.adducts, self.charge,  search_property, self.adducts_label, self.FilterProperty)
+            QtWidgets.QMessageBox.information(self, "Info", "Analysis complete!")
+            self.IsoFinder_PBar.reset()
+            print('Done!!')

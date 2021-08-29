@@ -147,16 +147,15 @@ class Ui(QtWidgets.QMainWindow):
     def GetFilterParams(self):
         if self.EnableFilter_cbtn.isChecked():
             self.NoiseFilterParams = [True, self.IntensePerc_spinbox.value(), self.BreakCount_spinbox.value()]
-        print(self.NoiseFilterParams)
 
     #OPEN COMPOUNDS LIST SEARCH MODE
     def DB_OpenDialog(self):
-        DB_Dialog = Dialog_DBFinder.Ui(self.Spectralist)
+        DB_Dialog = Dialog_DBFinder.Ui(self.Spectralist, self.NoiseFilterParams)
         DB_Dialog.exec()
     
     #OPEN ELEMENTAL COMPOSITION SEARCH MODE
     def EC_OpenDialog(self):
-        EC_Dialog = Dialog_FormulaFinder.Ui(self.Spectralist)
+        EC_Dialog = Dialog_FormulaFinder.Ui(self.Spectralist, self.NoiseFilterParams)
         EC_Dialog.exec()
     
 
