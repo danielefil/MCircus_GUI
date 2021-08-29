@@ -12,20 +12,20 @@ import time
 
 
 # Cartella contenente gli spettri
-SP_folderPath = r'C:\Users\df426\Desktop\neg'
-#SP_folderPath = r'C:\Users\df426\Desktop\AnalisiCromo\Spectra'
+SP_folderPath = r"C:\Users\df426\Desktop\TEST_MassCircus_GUI"
+#SP_folderPath = r"C:\Users\df426\Desktop\AnalisiCromo\Spectra"
 files = Path(SP_folderPath)
 
-#addotti = ['Cl', 'Hp'] #Lista degli addotti Hp --> per perdita H+
-addotti = ['El'] #Lista degli addotti El --> perdita elettrone
+#addotti = ["Cl", "Hp"] #Lista degli addotti Hp --> per perdita H+
+addotti = ["El"] #Lista degli addotti El --> perdita elettrone
 carica = -3 #Numero di cariche
 # Percorso che contiene il database dei composti da cercare
-DB_path = r'C:\Users\df426\Desktop\Spettri_Leganti\DB\Leganti_CN- neg.dat'
-#DB_path = r'C:\Users\df426\Desktop\AnalisiCromo\Formule\Part2_2020_7_3_cromoacetato_gallico_1a3_h2o_meoh_1a100_400-2000_NEG.dat'
-search_property = ['ppm', 10] #Modalita' di ricerca: ppm/dalton, tolleranza 
+DB_path = r"C:\Users\df426\Desktop\TEST_MassCircus_GUI\DB\Leganti_CN- neg.dat"
+#DB_path = r"C:\Users\df426\Desktop\AnalisiCromo\Formule\Part2_2020_7_3_cromoacetato_gallico_1a3_h2o_meoh_1a100_400-2000_NEG.dat"
+search_property = ["ppm", 10] #Modalita" di ricerca: ppm/dalton, tolleranza 
 # Lista etichetta degli addotti: +H(+), -H(+)
-#addotti_label = ['+Cl(-)','-H(+)']
-addotti_label = ['-']
+#addotti_label = ["+Cl(-)","-H(+)"]
+addotti_label = ["-"]
 filterValues = [False, 0, 0]
 
 

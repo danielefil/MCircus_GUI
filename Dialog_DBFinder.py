@@ -9,6 +9,7 @@ class Ui(QDialog):
         uic.loadUi("Dialog_ListFinder.ui", self) # Load the .ui file
         self.setWindowTitle("Compound List Finder")
         self.show()
+        self.SpectraList = FileList
         
         #DISABLED
         self.Adducts_GBox.setEnabled(False)
@@ -112,14 +113,16 @@ class Ui(QDialog):
         else:
             if self.ppm_RBtn.isChecked():
                 SearchMode = 'ppm'
+                ppm = self.ppm_SPbox.value()
+                search_property = [SearchMode, ppm]
             if self.dalton_RBtn.isChecked():
                 SearchMode = 'dalton'
+                dalton = self.dalton_SPbox.value()
+                search_property = [SearchMode, dalton]
     
-            ppm = self.ppm_SPbox.value()
-            dalton = self.dalton_SPbox.value()
-            
             ##### ###### LOOP PER CERCARE I COMPOSSTI ###### #######  
-            for spettro in self.SpectraList: 
-                PatternSearch(FilesList, DB_path, addotti, carica,  search_property, addotti_label, Filtering=filterValues)
-                #print(spettro, composti)
-                #pass
+            for _spectra in self.SpectraList: 
+                PatternSearch(_spectra, self.DB_path, self.adducts, self.charge,  search_property, self.adducts_label, Filtering=[False, 0, 0])
+            
+            print('Done!!')
+

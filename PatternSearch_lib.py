@@ -182,7 +182,7 @@ def SaveOutput(output_list, input_filepath, Diff):
 
 ############################################################################################
 
-def PatternSearch(spectra_path: str, database_path: str, adduct_list: list, charge,  search_property: list, label_list: list, Filtering: list):
+def PatternSearch(spectrum_path: str, database_path: str, adduct_list: list, charge,  search_property: list, label_list: list, Filtering: list):
     # Leggo il file che contiene la lista di composti da cercare ## DATABASE ##
     df_db = pd.read_csv(database_path, sep='\t', dtype={'Formula': str, 'Mass': float})
     database = df_db.to_numpy()
@@ -205,53 +205,53 @@ def PatternSearch(spectra_path: str, database_path: str, adduct_list: list, char
     # CmpsToFind contine tutte le info sui composti che devo cercare
 
 
-    for spectrum_path in spectra_path:
-        df_sp = pd.read_csv(spectrum_path, dtype={'Mass [m/z]': float, 'Intensity': float})
+   ################################### for spectrum_path in spectra_path:
+    df_sp = pd.read_csv(spectrum_path, dtype={'Mass [m/z]': float, 'Intensity': float})
         
         
-        # Filtraggio delle intensita basata sul Arthur's method
-        if Filtering[0]:
-            df_sp = Apply_filterZ(df_sp, Filtering)
+    # Filtraggio delle intensita basata sul Arthur's method
+    if Filtering[0]:
+        df_sp = Apply_filterZ(df_sp, Filtering)
         
-        spectra = np.round(df_sp.to_numpy(), 5)
-        _spectra = Spectra(spectra)
-        # Genero liste per gli output
-        output = []
+    spectra = np.round(df_sp.to_numpy(), 5)
+    _spectra = Spectra(spectra)
+    # Genero liste per gli output
+    output = []
 
         
-        for ii, Comp in enumerate(CmpsToFind):
-            print(ii)
-            if search_property[0] == 'ppm':
-                # FIND 1 - Cerco i valori per i quali il ppm è minore di un valore
-                find = diff(_spectra.mz, Comp.MoC, search_property[1], search_property[0])
-                if find != None:
-                    if Comp.compound not in Iso_dict:
-                        Iso_dict[Comp.compound] = Patter_Calculator(Comp.compound, Comp.charge, .0005, .001)
-                    pattern_t = Iso_dict[Comp.compound]
-                    # Find the isotopic pattern
-                    accordance, pattern_tbl, findedrate = find_pattern(pattern_t, spectra, search_property[1], search_property[0])                    
-                    score = pattern_score(pattern_tbl)
-                    #                 PM     m/z(teorico)    m/z(trovato)            Diff         intens. Ass.        Formula Bruta  Addotto     Accordo   Score    Picchi
-                    output.append([Comp.mass, Comp.MoC, float(_spectra.mz[find[0]]), find[1], float(_spectra.int[find[0]]), Comp.mol, Comp.label, accordance, score, findedrate])
-                else:
-                    pass
+    for ii, Comp in enumerate(CmpsToFind):
+        print(ii)
+        if search_property[0] == 'ppm':
+            # FIND 1 - Cerco i valori per i quali il ppm è minore di un valore
+            find = diff(_spectra.mz, Comp.MoC, search_property[1], search_property[0])
+            if find != None:
+                if Comp.compound not in Iso_dict:
+                    Iso_dict[Comp.compound] = Patter_Calculator(Comp.compound, Comp.charge, .00001, .0005, .001)
+                pattern_t = Iso_dict[Comp.compound]
+                # Find the isotopic pattern
+                accordance, pattern_tbl, findedrate = find_pattern(pattern_t, spectra, search_property[1], search_property[0])                    
+                score = pattern_score(pattern_tbl)
+                #                 PM     m/z(teorico)    m/z(trovato)            Diff         intens. Ass.        Formula Bruta  Addotto     Accordo   Score    Picchi
+                output.append([Comp.mass, Comp.MoC, float(_spectra.mz[find[0]]), find[1], float(_spectra.int[find[0]]), Comp.mol, Comp.label, accordance, score, findedrate])
+            else:
+                pass
                     
-            elif search_property[0] == 'dalton':
-                # FIND 2 - Cerco i valori per i quali la massa è compresa tra un intervallo
-                find = diff(spectra[:, 0], Comp.MoC, search_property[1], search_property[0])
-                if find != None:
-                    if Comp.compound not in Iso_dict:
-                        Iso_dict[Comp.compound] = Patter_Calculator(Comp.compound, Comp.charge, 'dalton', .001, .001)
-                    pattern_t = Iso_dict[Comp.compound]
-                    # Find the isotopic pattern
-                    accordance, pattern_tbl, findedrate = find_pattern(pattern_t, spectra, search_property[1], search_property[0])
-                    score = pattern_score(pattern_tbl)
-                    #                 PM     m/z(teorico)    m/z(trovato)            Diff         intens. Ass.        Formula Bruta  Addotto     Accordo   Score    Picchi
-                    output.append([Comp.mass, Comp.MoC, float(_spectra.mz[find[0]]), find[1], float(_spectra.int[find[0]]), Comp.mol, Comp.label, accordance, score, findedrate])
-                else:
-                    pass                
+        elif search_property[0] == 'dalton':
+            # FIND 2 - Cerco i valori per i quali la massa è compresa tra un intervallo
+            find = diff(spectra[:, 0], Comp.MoC, search_property[1], search_property[0])
+            if find != None:
+                if Comp.compound not in Iso_dict:
+                    Iso_dict[Comp.compound] = Patter_Calculator(Comp.compound, Comp.charge, 'dalton', .001, .001)
+                pattern_t = Iso_dict[Comp.compound]
+                # Find the isotopic pattern
+                accordance, pattern_tbl, findedrate = find_pattern(pattern_t, spectra, search_property[1], search_property[0])
+                score = pattern_score(pattern_tbl)
+                #                 PM     m/z(teorico)    m/z(trovato)            Diff         intens. Ass.        Formula Bruta  Addotto     Accordo   Score    Picchi
+                output.append([Comp.mass, Comp.MoC, float(_spectra.mz[find[0]]), find[1], float(_spectra.int[find[0]]), Comp.mol, Comp.label, accordance, score, findedrate])
+            else:
+                pass                
             #else:
              #   print('Error !!!')
               #  break # da implementare errore?? Return('Error')
         
-        SaveOutput(output, spectrum_path, Diff='Diff('+search_property[0]+')')
+    SaveOutput(output, spectrum_path, Diff='Diff('+search_property[0]+')')

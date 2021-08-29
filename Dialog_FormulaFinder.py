@@ -89,8 +89,12 @@ class Ui(QDialog):
         else:
             if self.Pos_RBtn.isChecked():
                 self.charge = int(self.charge_cBox.currentText())
+                self.adducts = ["El"]
+                self.adducts_label = ["(+)"]
             if self.Neg_RBtn.isChecked():
                 self.charge = -int(self.charge_cBox.currentText())
+                self.adducts = ["El"]
+                self.adducts_label = ["(-)"]
             ppm_diff = self.ppm_SPbox.value()
             atoms = self.readTableData()
             
@@ -128,12 +132,14 @@ class Ui(QDialog):
         else:
             if self.ppm_RBtn.isChecked():
                 SearchMode = 'ppm'
+                ppm = self.ppm_SPbox.value()
+                search_property = [SearchMode, ppm]
             if self.dalton_RBtn.isChecked():
                 SearchMode = 'dalton'
-     
-            ppm = self.ppm_SPbox_2.value()
-            dalton = self.dalton_SPbox.value()
+                dalton = self.dalton_SPbox.value()
+                search_property = [SearchMode, dalton]
+    
             ##### ###### LOOP PER CERCARE I COMPOSSTI ###### #######  
-            for spettro, composti in zip(self.SpectraList, self.tmpfiles_2): 
-                PatternSearch(FilesList, DB_path, addotti, carica,  search_property, addotti_label, Filtering=filterValues)
-                print(spettro, composti)
+            for _spectra, _compounds in zip(self.SpectraList, self.tmpfiles_2): 
+                PatternSearch(_spectra, _compounds, self.adducts, self.charge,  search_property, self.adducts_label, Filtering=[False, 0, 0])
+            print('Done !!')

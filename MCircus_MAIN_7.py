@@ -8,7 +8,7 @@ import sys
 
 
 # Other functions
-from Search_to_function_isopattern_10 import search_peak
+from PatternSearch_lib import PatternSearch
 import Dialog_FormulaFinder
 import Dialog_DBFinder
 
