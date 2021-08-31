@@ -1,3 +1,4 @@
-Version 5.0
+Version 7.0
 
-Implementare main program senza interfaccia grafica per debug
+Implementare lettura file *.raw e *.mzML
+Aggiungere filtro intensita' nella finestra di ricerca Element research

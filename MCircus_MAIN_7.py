@@ -8,7 +8,7 @@ import sys
 
 
 # Other functions
-from PatternSearch_lib import PatternSearch
+#from PatternSearch_lib import PatternSearch
 import Dialog_FormulaFinder
 import Dialog_DBFinder
 
@@ -25,7 +25,6 @@ class RawFilterDialog(QDialog):
         self.passlista = FileList
         _filenames = [i.stem for i in FileList]
         
-        #_filenames = [i.stem for i in self.passlista]
         self.SP_CBox.addItems(_filenames)
 
     
@@ -35,19 +34,10 @@ class RawFilterDialog(QDialog):
         self.Filter_CBox.clear()
         self.Filter_CBox.addItems(Filterlist)
 
-
     def SetFilter(self):
         self.selectedFilter = self.Filter_CBox.currentText()
         print(self.selectedFilter)
         self.close()
-
-class IsoPatternOptions(QDialog):
-    def __init__(self, parent=None):
-        # Call the inherited classes __init__ method
-        super(IsoPatternOptions, self).__init__(parent)
-        uic.loadUi('IsoPatternOptions.ui', self)  # Load the .ui file
-        self.setWindowTitle("Isotopic Pattern Calculator Options")
-        
 
 class Ui(QtWidgets.QMainWindow):
     def __init__(self):   

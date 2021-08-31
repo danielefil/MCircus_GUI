@@ -51,6 +51,7 @@ def Apply_filterZ(spectra_df, parameters: list):
     _noisefilter = spectra_df['Intensity'] >= noise
     spectra_df_filtered = spectra_df[_noisefilter]
 
+    print(len(spectra_df) ,len(spectra_df_filtered))
     return(spectra_df_filtered)
 
 ## ADDUCT GENERATOR
@@ -174,7 +175,15 @@ def SaveOutput(output_list, input_filepath, Diff):
     
     filename = Path(input_filepath).stem
     filepath = Path(input_filepath).parent
-    outputstring = str(filepath)+'/RES/RESULTS_'+ filename +'.csv'
+    
+    #NEW FOLDER RESULTS
+    results_path = (filepath).joinpath('Results') 
+    try:
+        results_path.mkdir(parents=True, exist_ok=True)
+    except FileExistsError:
+        pass
+    
+    outputstring = str(results_path)+'/RESULTS_'+ filename +'.csv'
 
     filtro = output_df['Accordo'] > 0.1
     output_df[filtro].to_csv(outputstring, index=False)
@@ -182,7 +191,7 @@ def SaveOutput(output_list, input_filepath, Diff):
 
 ############################################################################################
 
-def PatternSearch(spectrum_path: str, database_path: str, adduct_list: list, charge,  search_property: list, label_list: list, Filtering: list):
+def PatternSearch(spectrum_path: str, database_path: str, adduct_list: list, charge,  search_property: list, label_list: list, Filtering: list, PatternOptions:list]):
     # Leggo il file che contiene la lista di composti da cercare ## DATABASE ##
     df_db = pd.read_csv(database_path, sep='\t', dtype={'Formula': str, 'Mass': float})
     database = df_db.to_numpy()
@@ -192,7 +201,8 @@ def PatternSearch(spectrum_path: str, database_path: str, adduct_list: list, cha
     CmpsToFind = []
     Iso_dict = {}
 
-
+    #######PatternOptions = [.00001, .0005, .001]
+    
     # Genero i composti da cercare (Database + Adducts)
     for entries in database:
         for adduct in adducts:
@@ -212,21 +222,21 @@ def PatternSearch(spectrum_path: str, database_path: str, adduct_list: list, cha
     # Filtraggio delle intensita basata sul Arthur's method
     if Filtering[0]:
         df_sp = Apply_filterZ(df_sp, Filtering)
+        print("filtering == ON")
         
     spectra = np.round(df_sp.to_numpy(), 5)
     _spectra = Spectra(spectra)
     # Genero liste per gli output
     output = []
-
         
     for ii, Comp in enumerate(CmpsToFind):
-        print(ii)
         if search_property[0] == 'ppm':
             # FIND 1 - Cerco i valori per i quali il ppm è minore di un valore
             find = diff(_spectra.mz, Comp.MoC, search_property[1], search_property[0])
+            
             if find != None:
                 if Comp.compound not in Iso_dict:
-                    Iso_dict[Comp.compound] = Patter_Calculator(Comp.compound, Comp.charge, .00001, .0005, .001)
+                    Iso_dict[Comp.compound] = Patter_Calculator(Comp.compound, Comp.charge, PatternOptions)
                 pattern_t = Iso_dict[Comp.compound]
                 # Find the isotopic pattern
                 accordance, pattern_tbl, findedrate = find_pattern(pattern_t, spectra, search_property[1], search_property[0])                    
@@ -241,7 +251,7 @@ def PatternSearch(spectrum_path: str, database_path: str, adduct_list: list, cha
             find = diff(spectra[:, 0], Comp.MoC, search_property[1], search_property[0])
             if find != None:
                 if Comp.compound not in Iso_dict:
-                    Iso_dict[Comp.compound] = Patter_Calculator(Comp.compound, Comp.charge, 'dalton', .001, .001)
+                    Iso_dict[Comp.compound] = Patter_Calculator(Comp.compound, Comp.charge, PatternOptions)
                 pattern_t = Iso_dict[Comp.compound]
                 # Find the isotopic pattern
                 accordance, pattern_tbl, findedrate = find_pattern(pattern_t, spectra, search_property[1], search_property[0])

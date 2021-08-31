@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>354</width>
-    <height>126</height>
+    <height>179</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,10 +19,17 @@
      <x>20</x>
      <y>13</y>
      <width>321</width>
-     <height>101</height>
+     <height>151</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
+    <item row="1" column="0">
+     <widget class="QLabel" name="MergeThreshold_LB">
+      <property name="text">
+       <string>Merge Threshold (dalton)</string>
+      </property>
+     </widget>
+    </item>
     <item row="0" column="0">
      <widget class="QLabel" name="MinInt_LB">
       <property name="text">
@@ -31,7 +38,7 @@
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QDoubleSpinBox" name="MinInt_SB">
+     <widget class="QDoubleSpinBox" name="MinInt_SBox">
       <property name="decimals">
        <number>5</number>
       </property>
@@ -46,15 +53,11 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="MergeThreshold_LB">
-      <property name="text">
-       <string>Merge Threshold (dalton)</string>
-      </property>
-     </widget>
+    <item row="2" column="1">
+     <widget class="QDoubleSpinBox" name="IntRatio_SBox"/>
     </item>
     <item row="1" column="1">
-     <widget class="QDoubleSpinBox" name="MergeThreshold_SB"/>
+     <widget class="QDoubleSpinBox" name="MergeThreshold_SBox"/>
     </item>
     <item row="2" column="0">
      <widget class="QLabel" name="IntRatio_LB">
@@ -63,8 +66,12 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
-     <widget class="QDoubleSpinBox" name="IntRatio_SB"/>
+    <item row="3" column="1">
+     <widget class="QPushButton" name="SetOptions_btn">
+      <property name="text">
+       <string>PushButton</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

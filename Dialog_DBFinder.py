@@ -1,6 +1,15 @@
-from PyQt5 import QtCore, QtGui, QtWidgets, uic
-from PyQt5.QtWidgets import QDialog, QMainWindow, QApplication, QFileDialog
+from PyQt5 import QtWidgets, uic
+from PyQt5.QtWidgets import QDialog, QApplication, QFileDialog
 from PatternSearch_lib import PatternSearch
+
+
+class PatternOptionsDialog(QDialog):
+    def __init__(self, parent = None):   
+        super(Ui, self).__init__(parent) # Call the inherited classes __init__ method
+        uic.loadUi('Dialog_PatternOptions.ui', self) # Load the .ui file
+        self.setWindowTitle("Isotopic Pattern Calculator Options")
+        self.show()
+
 
 
 class Ui(QDialog):
@@ -9,9 +18,11 @@ class Ui(QDialog):
         uic.loadUi("Dialog_ListFinder.ui", self) # Load the .ui file
         self.setWindowTitle("Compound List Finder")
         self.show()
+        
+        # INIT GLOBAL VARIABLES AND OPTIONS
         self.SpectraList = FileList
         self.FilterProperty = FilterOptions
-        
+        self.PatternOptions = [.00001, .0005, .001]
         #DISABLED
         self.Adducts_GBox.setEnabled(False)
         self.Charge_GBox.setEnabled(False)
@@ -25,18 +36,19 @@ class Ui(QDialog):
         self.Positive_RBtn.toggled.connect(self.Enable_Adducts_Selector)
         self.Negative_RBtn.toggled.connect(self.Enable_Adducts_Selector)
         self.DB_Create_btn.clicked.connect(self.Adducts_generator)
-        self.IsoFind_Btn.clicked.connect(self.PatternFinder)
+        self.IsoFind_btn.clicked.connect(self.PatternFinder)
+        self.IsoOptions_btn.clicked.connect(self.Pattern_Options)
     
-    
+    # OPEN FILES DIALOG -- COMPOUNDS LIST FILE
     def openDatabase_Dialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        files, _ = QFileDialog.getOpenFileNames(self, "Select Compounds List file", "", "CSV Files (*.csv);;Text Files (*.txt)", options=options)
+        files, _ = QFileDialog.getOpenFileNames(self, "Select Compounds List file", "", "DAT Files (*.dat);;Text Files (*.txt)", options=options)
         if files:
             self.DB_line.setText(files[0])
             self.DB_path = files[0]
             self.Adducts_GBox.setEnabled(True)
-        print(self.DB_path) # FOR DEBUG
+        #print(self.DB_path) # FOR DEBUG
     
     # ENABLE/DISABLE +/- ADDUCTOR SELECTOR
     def Enable_Adducts_Selector(self):
@@ -50,19 +62,20 @@ class Ui(QDialog):
             self.Negative_GBox.setEnabled(True)
             self.DB_Create_btn.setEnabled(True)
             self.Charge_GBox.setEnabled(True)
-       
+    
+    # ADDUCT LIST CREATOR   
     def Adducts_generator(self):
         if self.Positive_RBtn.isChecked():
             self.pos_adducts_generator()
         else:
             self.neg_adducts_generator()
         
-        print(self.charge, self.adducts, self.adducts_label) #FOR DEBUG
+        #print(self.charge, self.adducts, self.adducts_label) #FOR DEBUG
         # MESSAGGIO OPERAZIONE COMPLETATA
         QtWidgets.QMessageBox.about(self, "Message", "Adducts list Created")
         self.IsoFinder_GBox.setEnabled(True)
 
-        # NEGATIVE ADDUCT LIST CREATOR
+    # NEGATIVE ADDUCT LIST CREATOR
     def neg_adducts_generator(self):
         self.adducts = []
         self.adducts_label = []
@@ -84,7 +97,7 @@ class Ui(QDialog):
         self.charge = -int(self.charge_number_comboBox.currentText())
 
 
-        # POSITIVE ADDUCT LIST CREATOR
+    # POSITIVE ADDUCT LIST CREATOR
     def pos_adducts_generator(self):
         self.adducts = []
         self.adducts_label = []
@@ -104,10 +117,12 @@ class Ui(QDialog):
             self.adducts.append("H")
             self.adducts_label.append("+H(+)")
         self.charge = int(self.charge_number_comboBox.currentText())
-        # MESSAGGIO OPERAZIONE COMPLETATA
-        QtWidgets.QMessageBox.about(self, "Message", "Adducts list Created")
 
-        # ENABLE/DISABLE PPM/DALTON SEARCH MODE
+    def Pattern_Options():
+        dlg = PatternOptionsDialog()
+        dlg.exec()
+    
+    # PPM/DALTON SELECTION AND ISOTOPIC PATTERN SEARCH
     def PatternFinder(self):
         if not(self.ppm_RBtn.isChecked() or self.dalton_RBtn.isChecked()):
             QtWidgets.QMessageBox.warning(self, "Warning", "Select ppm or dalton mode")
@@ -121,19 +136,14 @@ class Ui(QDialog):
                 dalton = self.dalton_SPbox.value()
                 search_property = [SearchMode, dalton]
     
-            ##### ###### LOOP PER CERCARE I COMPOSSTI ###### #######  
-            '''
-            for _spectra in self.SpectraList: 
-                PatternSearch(_spectra, self.DB_path, self.adducts, self.charge,  search_property, self.adducts_label, self.FilterProperty)
-            QtWidgets.QMessageBox.information(self, "Info", "Analysis complete!")
-            print('Done!!')
-            '''
-            self.progressBar.setMaximum(len(self.SpectraList))
-            
+            ##### ###### LOOP WITH PROGRESS BAR TO SEARCH COMPOUDS WITH ISOTOPIC PATTERN MATCH ###### #######  
+            self.IsoFinder_PBar.reset()
+            self.IsoFinder_PBar.setMaximum(len(self.SpectraList))
+            self.IsoFind_btn.setEnabled(False)
             for index, _spectra in enumerate(self.SpectraList, 1):
-                self.progressBar.reset()
-                self.progressBar.setValue(index)
+                self.IsoFinder_PBar.setValue(index)
                 QApplication.processEvents()
-                PatternSearch(_spectra, self.DB_path, self.adducts, self.charge,  search_property, self.adducts_label, self.FilterProperty)
-            QtWidgets.QMessageBox.information(self, "Info", "Analysis complete!")
-            print('Done!!')
+                PatternSearch(_spectra, self.DB_path, self.adducts, self.charge,  search_property, self.adducts_label, self.FilterProperty, PatternOptions)
+            QtWidgets.QMessageBox.information(self, "Info", "Analysis completed!")
+            self.IsoFinder_PBar.reset()
+            self.IsoFind_btn.setEnabled(True)
