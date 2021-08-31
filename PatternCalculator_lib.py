@@ -112,7 +112,7 @@ def calcolatore(Isotopic_ratio, Isotopic_weight, combination):
 #################################################
 
 
-def Patter_Calculator(molecola: str, charge: int, MinIntesity, merge_threshold, ratio_threshold):
+def Patter_Calculator(molecola: str, charge: int, PatternOptions: list):
     w, r, a = Generate_molecule(molecola)
     ratio, weight = [], []
 
@@ -139,8 +139,8 @@ def Patter_Calculator(molecola: str, charge: int, MinIntesity, merge_threshold, 
         raw_weights = np.add.outer(raw_weights, weight[index2+1])
         raw_ratios = np.outer(raw_ratios, ratio[index2+1])
 
-    New_Output = generate_output(raw_weights, raw_ratios, charge, MinIntesity)
-    Filtered = PatternFilter(New_Output, merge_threshold, ratio_threshold)  
+    New_Output = generate_output(raw_weights, raw_ratios, charge, PatternOptions[0])
+    Filtered = PatternFilter(New_Output, PatternOptions[1], PatternOptions[2])
 
     return Filtered
     
