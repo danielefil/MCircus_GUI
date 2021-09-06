@@ -1,3 +1,4 @@
 {
-    "qtForPython.designer.path": "c:\\Program Files (x86)\\Qt Designer\\designer.exe"
+    "qtForPython.designer.path": "c:\\Program Files (x86)\\Qt Designer\\designer.exe",
+    "pyqt-integration.qtdesigner.path": "/Applications/Qt Designer.app"
 }
