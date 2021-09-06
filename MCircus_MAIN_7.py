@@ -1,4 +1,4 @@
-import RawReader_lib
+#import RawReader_lib
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtWidgets import QDialog, QMainWindow, QApplication, QFileDialog
 from pathlib import Path
@@ -9,35 +9,10 @@ import sys
 
 # Other functions
 #from PatternSearch_lib import PatternSearch
+import Dialog_RawFile
 import Dialog_FormulaFinder
 import Dialog_DBFinder
 
-
-class RawFilterDialog(QDialog):
-    def __init__(self, FileList, parent = None):   
-        super(RawFilterDialog, self).__init__(parent) # Call the inherited classes __init__ method
-        uic.loadUi('RawFilter.ui', self) # Load the .ui file
-        self.setWindowTitle("Filter Selector")
-        #CONNECTION
-        self.SP_CBox.currentIndexChanged.connect(self.SelectionChange)
-        self.SetFilter_btn.clicked.connect(self.SetFilter)
-        
-        self.passlista = FileList
-        _filenames = [i.stem for i in FileList]
-        
-        self.SP_CBox.addItems(_filenames)
-
-    
-    def SelectionChange(self):
-        selectedSpectraIndex = self.SP_CBox.currentIndex()
-        Filterlist = RawReader_lib.getScanFilter(str(self.passlista[selectedSpectraIndex]))
-        self.Filter_CBox.clear()
-        self.Filter_CBox.addItems(Filterlist)
-
-    def SetFilter(self):
-        self.selectedFilter = self.Filter_CBox.currentText()
-        print(self.selectedFilter)
-        self.close()
 
 class Ui(QtWidgets.QMainWindow):
     def __init__(self):   
@@ -118,11 +93,10 @@ class Ui(QtWidgets.QMainWindow):
         
                 for _file in self.SpectraPath.glob(self.fileext):
                     self.Spectralist.append(_file)
-                #print(self.Spectralist)   ## FOR DEBUG
                 if self.fileext == '*.raw':
                     # Apro finestra per selezione dei filtri
-                    dlg = RawFilterDialog(self.Spectralist)
-                    dlg.exec()
+                    RAW_Dialog = Dialog_RawFile.Ui(self.Spectralist)
+                    RAW_Dialog.exec()
 
     
     
