@@ -4,11 +4,26 @@ from PatternSearch_lib import PatternSearch
 
 
 class PatternOptionsDialog(QDialog):
-    def __init__(self, parent = None):   
-        super(Ui, self).__init__(parent) # Call the inherited classes __init__ method
+    def __init__(self, OptionsList, parent = None):   
+        super(PatternOptionsDialog, self).__init__(parent) # Call the inherited classes __init__ method
         uic.loadUi('Dialog_PatternOptions.ui', self) # Load the .ui file
-        self.setWindowTitle("Isotopic Pattern Calculator Options")
-        self.show()
+        self.setWindowTitle("Isotopic pattern Options")
+        #self.show()
+
+        # INIT GLOBAL VARIABLES AND OPTIONS
+        self.optionsList = OptionsList
+
+        #CONNECTION
+        self.SetOptions_btn.toggled.connect(self.SetOptions)
+        self.MinIntensity = self.MinInt_SBox.value()
+        self.MergeThre = self.MergeThreshold_SBox.value()
+        self.IntensityRation = self.IntensityRation_SBox.value()
+
+    def SetOptions(self):
+        #self.OptionsList = [self.MinIntensity, self.MergeThre, self.IntensityRation]
+        #print('cioa')
+        self.close()
+        #return(self.OptionsList)
 
 
 
@@ -118,9 +133,11 @@ class Ui(QDialog):
             self.adducts_label.append("+H(+)")
         self.charge = int(self.charge_number_comboBox.currentText())
 
-    def Pattern_Options():
-        dlg = PatternOptionsDialog()
-        dlg.exec()
+    def Pattern_Options(self):
+        dlg = PatternOptionsDialog(self.PatternOptions)
+        #dlg.exec()
+        
+        print(dlg.SetOptions())
     
     # PPM/DALTON SELECTION AND ISOTOPIC PATTERN SEARCH
     def PatternFinder(self):
@@ -143,7 +160,7 @@ class Ui(QDialog):
             for index, _spectra in enumerate(self.SpectraList, 1):
                 self.IsoFinder_PBar.setValue(index)
                 QApplication.processEvents()
-                PatternSearch(_spectra, self.DB_path, self.adducts, self.charge,  search_property, self.adducts_label, self.FilterProperty, PatternOptions)
+                PatternSearch(_spectra, self.DB_path, self.adducts, self.charge,  search_property, self.adducts_label, self.FilterProperty, self.PatternOptions)
             QtWidgets.QMessageBox.information(self, "Info", "Analysis completed!")
             self.IsoFinder_PBar.reset()
             self.IsoFind_btn.setEnabled(True)
