@@ -23,17 +23,17 @@
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="0">
-     <widget class="QLabel" name="MergeThreshold_LB">
-      <property name="text">
-       <string>Merge Threshold (dalton)</string>
-      </property>
-     </widget>
-    </item>
     <item row="0" column="0">
      <widget class="QLabel" name="MinInt_LB">
       <property name="text">
        <string>Min Intensity (%)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="MergeThreshold_LB">
+      <property name="text">
+       <string>Merge Threshold (dalton)</string>
       </property>
      </widget>
     </item>
@@ -101,7 +101,7 @@
     <item row="3" column="1">
      <widget class="QPushButton" name="SetOptions_btn">
       <property name="text">
-       <string>PushButton</string>
+       <string>Set Options</string>
       </property>
      </widget>
     </item>

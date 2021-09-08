@@ -4,23 +4,9 @@ from PyQt5.QtWidgets import QDialog, QApplication, QFileDialog
 from pathlib import Path
 import csv
 from element import Element
+import Dialog_IsoOptions
 from FormulaFinder_lib import FormulaFinder, FormulaRefiner
 from PatternSearch_lib import PatternSearch
-
-
-class PatternOptionsDialog(QDialog):
-    def __init__(self, parent = None):   
-        super(Ui, self).__init__(parent) # Call the inherited classes __init__ method
-        uic.loadUi('Dialog_PatternOptions.ui', self) # Load the .ui file
-        self.setWindowTitle("Isotopic Pattern Calculator Options")
-        self.show()
-        
-        #CONNECTION
-        self.SetOptions_btn.clicked.connect(self.SetOptions)
-
-    def SetOptions(self):
-        self.PatternOptions = [MinInt_SBox, MergeThreshold_SBox, IntRatio_SBox]
-        self.close()
 
 
 class Ui(QDialog):
@@ -150,9 +136,11 @@ class Ui(QDialog):
             self.tmpfiles_2.append(Complist)
         self.IsoFinder_GBox.setEnabled(True)
 
-    def Pattern_Options():
-        dlg = PatternOptionsDialog()
+    # SET ISOTOPIC PATTERN SEARCH OPTIONS
+    def Pattern_Options(self):
+        dlg = Dialog_IsoOptions.Ui(self.PatternOptions) 
         dlg.exec()
+        self.PatternOptions = dlg.SetOptions()
 
     # PPM/DALTON SELECTION AND ISOTOPIC PATTERN SEARCH
     def PatternFinder(self):

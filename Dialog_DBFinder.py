@@ -1,30 +1,7 @@
+import Dialog_IsoOptions
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QDialog, QApplication, QFileDialog
 from PatternSearch_lib import PatternSearch
-
-
-class PatternOptionsDialog(QDialog):
-    def __init__(self, OptionsList, parent = None):   
-        super(PatternOptionsDialog, self).__init__(parent) # Call the inherited classes __init__ method
-        uic.loadUi('Dialog_PatternOptions.ui', self) # Load the .ui file
-        self.setWindowTitle("Isotopic pattern Options")
-        #self.show()
-
-        # INIT GLOBAL VARIABLES AND OPTIONS
-        self.optionsList = OptionsList
-
-        #CONNECTION
-        self.SetOptions_btn.toggled.connect(self.SetOptions)
-        self.MinIntensity = self.MinInt_SBox.value()
-        self.MergeThre = self.MergeThreshold_SBox.value()
-        self.IntensityRation = self.IntensityRation_SBox.value()
-
-    def SetOptions(self):
-        #self.OptionsList = [self.MinIntensity, self.MergeThre, self.IntensityRation]
-        #print('cioa')
-        self.close()
-        #return(self.OptionsList)
-
 
 
 class Ui(QDialog):
@@ -132,12 +109,12 @@ class Ui(QDialog):
             self.adducts.append("H")
             self.adducts_label.append("+H(+)")
         self.charge = int(self.charge_number_comboBox.currentText())
-
+    
+    # SET ISOTOPIC PATTERN SEARCH OPTIONS
     def Pattern_Options(self):
-        dlg = PatternOptionsDialog(self.PatternOptions)
-        #dlg.exec()
-        
-        print(dlg.SetOptions())
+        dlg = Dialog_IsoOptions.Ui(self.PatternOptions) #
+        dlg.exec()
+        self.PatternOptions = dlg.SetOptions()
     
     # PPM/DALTON SELECTION AND ISOTOPIC PATTERN SEARCH
     def PatternFinder(self):
