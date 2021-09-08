@@ -97,6 +97,9 @@ class Ui(QtWidgets.QMainWindow):
                     # Apro finestra per selezione dei filtri
                     RAW_Dialog = Dialog_RawFile.Ui(self.Spectralist)
                     RAW_Dialog.exec()
+                elif self.fileext == '*.mzML':
+                    mzML_Dialog = Dialog_mzMLFile.Ui(self.Spectralist)
+                    mzML_Dialog.exec()
 
     
     
