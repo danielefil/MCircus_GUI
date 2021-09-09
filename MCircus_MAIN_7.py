@@ -29,19 +29,20 @@ class Ui(QtWidgets.QMainWindow):
         self.Spectralist = []
         self.fileext = None
         self.SpectraPath = ''
+        self.BlankFilePath = ''
         self.NoiseFilterParams = [False, 0, 0]
         self.FindMethod = []
         
 
     
-    # DISABLE ELEMENTS
+    # DISABLED ELEMENTS
     def grey_components(self):
         self.tabWidget.setTabEnabled(1, False)
         self.tabWidget.setTabEnabled(2, False)
-        ###self.tabWidget.setTabEnabled(3, False)
-
+        self.tabWidget.setTabEnabled(3, False)
         self.gBox_NoiseFilter.setEnabled(False)
-    
+        self.gBox_BlankSubtract.setEnabled(False)
+
 
     # CONNECTIONS
     def enable_connection(self):
@@ -56,8 +57,13 @@ class Ui(QtWidgets.QMainWindow):
         self.EnableFilter_cbtn.toggled.connect(self.Enable_Filtering)
         self.Next2_btn.clicked.connect(self.nextTab)
         self.Next2_btn.clicked.connect(self.GetFilterParams)
+
+        #TAB  - BLANK SUBSTRACTION
+        self.EnableBlank_cbtn.toggled.connect(self.Enable_Blank)
+        self.Next3_btn.clicked.connect(self.nextTab2)
+        self.OpenBL_btn.clicked.connect(self.GetBlankFile)
         
-        #TAB 3 - FIND METHOD
+        #TAB 4 - FIND METHOD
         self.DB_Dialog_btn.clicked.connect(self.DB_OpenDialog)
         self.EC_Dialog_btn.clicked.connect(self.EC_OpenDialog)
 
@@ -70,6 +76,17 @@ class Ui(QtWidgets.QMainWindow):
             self.tabWidget.setTabEnabled(currentTab+1, True)
             self.tabWidget.setCurrentIndex(currentTab+1) 
     
+    def nextTab2(self):
+        if (self.EnableBlank_cbtn.isChecked() and self.BlankFilePath == ''):
+            QtWidgets.QMessageBox.warning(self, "Warning", "Select spectra folder to continue or disable Blank subtractions")
+        elif (self.EnableBlank_cbtn.isChecked() and self.BlankFilePath != ''):
+            currentTab = self.tabWidget.currentIndex()
+            self.tabWidget.setTabEnabled(currentTab+1, True)
+            self.tabWidget.setCurrentIndex(currentTab+1)
+        else:    
+            currentTab = self.tabWidget.currentIndex()
+            self.tabWidget.setTabEnabled(currentTab+1, True)
+            self.tabWidget.setCurrentIndex(currentTab+1) 
 
     # FILES TYPE SELECTOR 
     def fileextension(self):
@@ -102,8 +119,7 @@ class Ui(QtWidgets.QMainWindow):
                     mzML_Dialog = Dialog_mzMLFile.Ui(self.Spectralist)
                     mzML_Dialog.exec()
     #### Devo ritornare self.spectralist con i dati *.csv 
-                    # mzML_Dialog.SetFilter()
-
+                    self.Spectralist = mzML_Dialog.SetFilter()
     
     
     # ENABLE/DISABLE NOISE FILTERING
@@ -112,11 +128,28 @@ class Ui(QtWidgets.QMainWindow):
             self.gBox_NoiseFilter.setEnabled(True)
         else:
             self.gBox_NoiseFilter.setEnabled(False)
+
+    # ENABLE/DISABLE BLANK SUBTRACTION
+    def Enable_Blank(self):
+        if self.EnableBlank_cbtn.isChecked():
+            self.gBox_BlankSubtract.setEnabled(True)
+        else:
+            self.gBox_BlankSubtract.setEnabled(False)
     
     # GET NOISE FILTER PARAMETERS
     def GetFilterParams(self):
         if self.EnableFilter_cbtn.isChecked():
             self.NoiseFilterParams = [True, self.IntensePerc_spinbox.value(), self.BreakCount_spinbox.value()]
+
+
+    def GetBlankFile(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        files, _ = QFileDialog.getOpenFileNames(
+            self, "Select Blank Spectra", "", "csv Files (*.csv);;Text Files (*.txt)", options=options)
+        if files:
+            self.BL_line.setText(files[0])
+            self.BlankFilePath = files[0]
 
     #OPEN COMPOUNDS LIST SEARCH MODE
     def DB_OpenDialog(self):

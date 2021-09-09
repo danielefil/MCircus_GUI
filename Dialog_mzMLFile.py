@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QDialog
 class Ui(QDialog):
     def __init__(self, FileList, parent = None):   
         super(Ui, self).__init__(parent) # Call the inherited classes __init__ method
-        uic.loadUi('RawFilter.ui', self) # Load the .ui file
+        uic.loadUi('FilterDialog.ui', self) # Load the .ui file
         self.setWindowTitle("Filter Selector")
         #CONNECTION
         self.SP_CBox.currentIndexChanged.connect(self.SelectionChange)
@@ -36,11 +36,8 @@ class Ui(QDialog):
             pass
 
         for _file in self.FileList:
-            AvgSpectraFilePath = mzMLReader_lib.getAverageSpectra(str(_file), self.selectedFilter, tmp_path) #Dataframe
-            #mzMLReader_lib.getAverageSpectra(str(_file), self.selectedFilter, tmp_path) #Dataframe
-            
+            AvgSpectraFilePath = mzMLReader_lib.getAverageSpectra(str(_file), self.selectedFilter, tmp_path)
             self.NewFileList.append(AvgSpectraFilePath)
     
         self.close()
-        print(self.NewFileList)
         return(self.NewFileList)
