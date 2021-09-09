@@ -9,6 +9,7 @@ import sys
 
 # Other functions
 #from PatternSearch_lib import PatternSearch
+import Dialog_mzMLFile
 import Dialog_RawFile
 import Dialog_FormulaFinder
 import Dialog_DBFinder
@@ -100,6 +101,8 @@ class Ui(QtWidgets.QMainWindow):
                 elif self.fileext == '*.mzML':
                     mzML_Dialog = Dialog_mzMLFile.Ui(self.Spectralist)
                     mzML_Dialog.exec()
+    #### Devo ritornare self.spectralist con i dati *.csv 
+                    # mzML_Dialog.SetFilter()
 
     
     

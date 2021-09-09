@@ -1,4 +1,5 @@
-import RawReader_lib
+import mzMLReader_lib
+from pathlib import Path
 from PyQt5 import uic
 from PyQt5.QtWidgets import QDialog
 
@@ -16,22 +17,30 @@ class Ui(QDialog):
         
         self.SP_CBox.addItems(_filenames)
 
-    
+     
     def SelectionChange(self):
         selectedSpectraIndex = self.SP_CBox.currentIndex()
-        Filterlist = RawReader_lib.getScanFilter(str(self.FileList[selectedSpectraIndex]))
+        Filterlist = mzMLReader_lib.getScanFilter(str(self.FileList[selectedSpectraIndex]))
         self.Filter_CBox.clear()
         self.Filter_CBox.addItems(Filterlist)
-    '''
-    def RawConverter(self):
-        for _file in self.FileList:
-            print(_file, self.selectedFilter)
-            RawReader_lib.GetAverage(str(_file), self.selectedFilter)  # AVG the spectra and Convert it to csv file
-    '''     
+    
     
     def SetFilter(self):
         self.selectedFilter = self.Filter_CBox.currentText()
-        self.RawConverter()
-        self.close()
+        self.NewFileList = []
+        
+        tmp_path = (Path(__file__).parent).joinpath('tmp') 
+        try:
+            tmp_path.mkdir(parents=True, exist_ok=True)
+        except FileExistsError:
+            pass
 
+        for _file in self.FileList:
+            AvgSpectraFilePath = mzMLReader_lib.getAverageSpectra(str(_file), self.selectedFilter, tmp_path) #Dataframe
+            #mzMLReader_lib.getAverageSpectra(str(_file), self.selectedFilter, tmp_path) #Dataframe
+            
+            self.NewFileList.append(AvgSpectraFilePath)
     
+        self.close()
+        print(self.NewFileList)
+        return(self.NewFileList)
