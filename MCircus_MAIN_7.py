@@ -29,7 +29,7 @@ class Ui(QtWidgets.QMainWindow):
         self.Spectralist = []
         self.fileext = None
         self.SpectraPath = ''
-        self.BlankFilePath = ''
+        self.BlankFilePath = False
         self.NoiseFilterParams = [False, 0, 0]
         self.FindMethod = []
         
@@ -77,9 +77,9 @@ class Ui(QtWidgets.QMainWindow):
             self.tabWidget.setCurrentIndex(currentTab+1) 
     
     def nextTab2(self):
-        if (self.EnableBlank_cbtn.isChecked() and self.BlankFilePath == ''):
+        if (self.EnableBlank_cbtn.isChecked() and self.BlankFilePath == False):
             QtWidgets.QMessageBox.warning(self, "Warning", "Select spectra folder to continue or disable Blank subtractions")
-        elif (self.EnableBlank_cbtn.isChecked() and self.BlankFilePath != ''):
+        elif (self.EnableBlank_cbtn.isChecked() and self.BlankFilePath == True):
             currentTab = self.tabWidget.currentIndex()
             self.tabWidget.setTabEnabled(currentTab+1, True)
             self.tabWidget.setCurrentIndex(currentTab+1)
@@ -149,7 +149,8 @@ class Ui(QtWidgets.QMainWindow):
             self, "Select Blank Spectra", "", "csv Files (*.csv);;Text Files (*.txt)", options=options)
         if files:
             self.BL_line.setText(files[0])
-            self.BlankFilePath = files[0]
+            self.BlankFilePath = True
+            self.Spectralist.append(files[0]) ##metto il bianco all fine della mia lista dei campioni
 
     #OPEN COMPOUNDS LIST SEARCH MODE
     def DB_OpenDialog(self):
