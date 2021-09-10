@@ -7,6 +7,7 @@ from Spectra_class import Spectra
 import pandas as pd
 import numpy as np
 import itertools as it
+import os
 
 ## FILTRO ##
 
@@ -169,21 +170,14 @@ def pattern_score(pattern_tbl: np.array):
     return(round(_accordance * 100, 0))
 
 # SAVE PATTERN
-def SaveOutput(output_list, input_filepath, Diff):
+def SaveOutput(output_list, input_filepath, ResultPath, Diff):
     colnames = ['PM', 'm/z(teorico)', 'm/z(trovato)', Diff, 'Intens. Ass.', 'Fromula Bruta', 'Addotto', 'Accordo', 'Score', 'Picchi']
     output_df = pd.DataFrame.from_records(output_list, columns=colnames)
-    
+       
     filename = Path(input_filepath).stem
-    filepath = Path(input_filepath).parent
+    #filepath = Path(input_filepath).parent
     
-    #NEW FOLDER RESULTS
-    results_path = (filepath).joinpath('Results') 
-    try:
-        results_path.mkdir(parents=True, exist_ok=True)
-    except FileExistsError:
-        pass
-    
-    outputstring = str(results_path)+'/RESULTS_'+ filename +'.csv'
+    outputstring = str(ResultPath)+'/RESULTS_'+ filename +'.csv'
 
     filtro = output_df['Accordo'] > 0.1
     output_df[filtro].to_csv(outputstring, index=False)
@@ -191,7 +185,8 @@ def SaveOutput(output_list, input_filepath, Diff):
 
 ############################################################################################
 
-def PatternSearch(spectrum_path: str, database_path: str, adduct_list: list, charge,  search_property: list, label_list: list, Filtering: list, PatternOptions:list):
+def PatternSearch(spectrum_path: str, database_path: str, ResultPath:str, adduct_list: list, charge,  search_property: list, label_list: list, Filtering: list, PatternOptions:list):
+    print(ResultPath)
     # Leggo il file che contiene la lista di composti da cercare ## DATABASE ##
     df_db = pd.read_csv(database_path, sep='\t', dtype={'Formula': str, 'Mass': float})
     database = df_db.to_numpy()
@@ -200,9 +195,7 @@ def PatternSearch(spectrum_path: str, database_path: str, adduct_list: list, cha
     adducts = adduct_generator(adduct_list, label_list, charge)
     CmpsToFind = []
     Iso_dict = {}
-
-    #######PatternOptions = [.00001, .0005, .001]
-    
+   
     # Genero i composti da cercare (Database + Adducts)
     for entries in database:
         for adduct in adducts:
@@ -264,4 +257,4 @@ def PatternSearch(spectrum_path: str, database_path: str, adduct_list: list, cha
              #   print('Error !!!')
               #  break # da implementare errore?? Return('Error')
         
-    SaveOutput(output, spectrum_path, Diff='Diff('+search_property[0]+')')
+    SaveOutput(output, spectrum_path, ResultPath, Diff='Diff('+search_property[0]+')')

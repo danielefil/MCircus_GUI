@@ -2,6 +2,8 @@ import Dialog_IsoOptions
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QDialog, QApplication, QFileDialog
 from PatternSearch_lib import PatternSearch
+from BlankSub_lib import BlankSub
+import pathlib
 
 
 class Ui(QDialog):
@@ -31,6 +33,17 @@ class Ui(QDialog):
         self.IsoFind_btn.clicked.connect(self.PatternFinder)
         self.IsoOptions_btn.clicked.connect(self.Pattern_Options)
     
+    # CREATE RESULT FOLDER
+    def Resultsmkdir(self):
+        filepath = pathlib.Path(self.SpectraList[0]).parent
+        self.ResultPath = pathlib.Path(str(filepath) + '\Results')
+        #NEW FOLDER RESULTS
+        try:
+            self.ResultPath.mkdir(parents=True, exist_ok=True)
+        except FileExistsError:
+            pass
+        self.ResultPath = str(self.ResultPath)
+
     # OPEN FILES DIALOG -- COMPOUNDS LIST FILE
     def openDatabase_Dialog(self):
         options = QFileDialog.Options()
@@ -131,13 +144,17 @@ class Ui(QDialog):
                 search_property = [SearchMode, dalton]
     
             ##### ###### LOOP WITH PROGRESS BAR TO SEARCH COMPOUDS WITH ISOTOPIC PATTERN MATCH ###### #######  
+            self.Resultsmkdir()
             self.IsoFinder_PBar.reset()
             self.IsoFinder_PBar.setMaximum(len(self.SpectraList))
             self.IsoFind_btn.setEnabled(False)
             for index, _spectra in enumerate(self.SpectraList, 1):
                 self.IsoFinder_PBar.setValue(index)
                 QApplication.processEvents()
-                PatternSearch(_spectra, self.DB_path, self.adducts, self.charge,  search_property, self.adducts_label, self.FilterProperty, self.PatternOptions)
+                PatternSearch(_spectra, self.DB_path, self.ResultPath, self.adducts,  self.charge,  search_property, self.adducts_label, self.FilterProperty, self.PatternOptions)
             QtWidgets.QMessageBox.information(self, "Info", "Analysis completed!")
             self.IsoFinder_PBar.reset()
             self.IsoFind_btn.setEnabled(True)
+            if self.FilterProperty[3]:
+                BlankSub(self.ResultPath, self.FilterProperty[4])
+                

@@ -30,7 +30,7 @@ class Ui(QtWidgets.QMainWindow):
         self.fileext = None
         self.SpectraPath = ''
         self.BlankFilePath = False
-        self.NoiseFilterParams = [False, 0, 0]
+        self.Noise_BlankParams = [False, 0, 0, False, 10]
         self.FindMethod = []
         
 
@@ -133,13 +133,15 @@ class Ui(QtWidgets.QMainWindow):
     def Enable_Blank(self):
         if self.EnableBlank_cbtn.isChecked():
             self.gBox_BlankSubtract.setEnabled(True)
+            self.Noise_BlankParams[3] = True
         else:
             self.gBox_BlankSubtract.setEnabled(False)
+            self.Noise_BlankParams[3] = False
     
     # GET NOISE FILTER PARAMETERS
     def GetFilterParams(self):
         if self.EnableFilter_cbtn.isChecked():
-            self.NoiseFilterParams = [True, self.IntensePerc_spinbox.value(), self.BreakCount_spinbox.value()]
+            self.Noise_BlankParams = [True, self.IntensePerc_spinbox.value(), self.BreakCount_spinbox.value(), False, 10]
 
 
     def GetBlankFile(self):
@@ -150,16 +152,17 @@ class Ui(QtWidgets.QMainWindow):
         if files:
             self.BL_line.setText(files[0])
             self.BlankFilePath = True
-            self.Spectralist.append(files[0]) ##metto il bianco all fine della mia lista dei campioni
+            #self.Spectralist.insert(0, files[0]) ##metto il bianco all fine della mia lista dei campioni
+            self.Spectralist.append(files[0])
 
     #OPEN COMPOUNDS LIST SEARCH MODE
     def DB_OpenDialog(self):
-        DB_Dialog = Dialog_DBFinder.Ui(self.Spectralist, self.NoiseFilterParams)
+        DB_Dialog = Dialog_DBFinder.Ui(self.Spectralist, self.Noise_BlankParams)
         DB_Dialog.exec()
     
     #OPEN ELEMENTAL COMPOSITION SEARCH MODE
     def EC_OpenDialog(self):
-        EC_Dialog = Dialog_FormulaFinder.Ui(self.Spectralist, self.NoiseFilterParams)
+        EC_Dialog = Dialog_FormulaFinder.Ui(self.Spectralist, self.Noise_BlankParams)
         EC_Dialog.exec()
     
 
