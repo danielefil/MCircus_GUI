@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\df426\Documents\MCircus_GUI\Ui\MassCircus_GUI_7.ui'
+# Form implementation generated from reading ui file 'c:\Users\df426\Documents\MCircus_GUI\Ui\MassCircus_GUI_7.1.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -14,11 +14,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(470, 420)
+        MainWindow.resize(471, 433)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.tabWidget = QtWidgets.QTabWidget(self.centralwidget)
-        self.tabWidget.setGeometry(QtCore.QRect(10, 30, 450, 370))
+        self.tabWidget.setGeometry(QtCore.QRect(10, 10, 450, 370))
         self.tabWidget.setObjectName("tabWidget")
         self.tab_1 = QtWidgets.QWidget()
         self.tab_1.setObjectName("tab_1")
@@ -179,9 +179,28 @@ class Ui_MainWindow(object):
         self.DB_Dialog_btn.setObjectName("DB_Dialog_btn")
         self.tabWidget.addTab(self.tab_3, "")
         MainWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 471, 21))
+        self.menubar.setObjectName("menubar")
+        self.menuFile = QtWidgets.QMenu(self.menubar)
+        self.menuFile.setObjectName("menuFile")
+        self.menuHelp = QtWidgets.QMenu(self.menubar)
+        self.menuHelp.setObjectName("menuHelp")
+        MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
+        self.actionClose = QtWidgets.QAction(MainWindow)
+        self.actionClose.setObjectName("actionClose")
+        self.actionDocumentation = QtWidgets.QAction(MainWindow)
+        self.actionDocumentation.setObjectName("actionDocumentation")
+        self.actionAbout = QtWidgets.QAction(MainWindow)
+        self.actionAbout.setObjectName("actionAbout")
+        self.menuFile.addAction(self.actionClose)
+        self.menuHelp.addAction(self.actionDocumentation)
+        self.menuHelp.addAction(self.actionAbout)
+        self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(MainWindow)
         self.tabWidget.setCurrentIndex(0)
@@ -216,3 +235,8 @@ class Ui_MainWindow(object):
         self.EC_Dialog_btn.setText(_translate("MainWindow", "Elemental Composition"))
         self.DB_Dialog_btn.setText(_translate("MainWindow", "Compounds List"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("MainWindow", "Find method"))
+        self.menuFile.setTitle(_translate("MainWindow", "File"))
+        self.menuHelp.setTitle(_translate("MainWindow", "Help"))
+        self.actionClose.setText(_translate("MainWindow", "Close"))
+        self.actionDocumentation.setText(_translate("MainWindow", "Documentation"))
+        self.actionAbout.setText(_translate("MainWindow", "About"))

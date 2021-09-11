@@ -75,7 +75,7 @@
       </spacer>
      </item>
      <item row="2" column="2">
-      <widget class="QDoubleSpinBox" name="dalton_SPbox_2">
+      <widget class="QDoubleSpinBox" name="dalton_SPbox_F">
        <property name="decimals">
         <number>4</number>
        </property>
@@ -101,21 +101,21 @@
       </spacer>
      </item>
      <item row="2" column="0">
-      <widget class="QRadioButton" name="dalton_RBtn_2">
+      <widget class="QRadioButton" name="dalton_RBtn">
        <property name="text">
         <string>Dalton Difference</string>
        </property>
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QRadioButton" name="ppm_RBtn_2">
+      <widget class="QRadioButton" name="ppm_RBtn">
        <property name="text">
         <string>ppm Difference</string>
        </property>
       </widget>
      </item>
      <item row="1" column="2">
-      <widget class="QSpinBox" name="ppm_SPbox_3">
+      <widget class="QSpinBox" name="ppm_SPbox_F">
        <property name="value">
         <number>20</number>
        </property>

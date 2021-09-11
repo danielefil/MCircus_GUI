@@ -18,7 +18,7 @@ import Dialog_DBFinder
 class Ui(QtWidgets.QMainWindow):
     def __init__(self):   
         super(Ui, self).__init__() # Call the inherited classes __init__ method
-        uic.loadUi("Ui/MassCircus_GUI_7.ui", self) # Load the .ui file
+        uic.loadUi("Ui/MassCircus_GUI_7.1.ui", self) # Load the .ui file
         
         # INIT FUNCTIONS
         self.show() # Show the GUI
@@ -134,6 +134,7 @@ class Ui(QtWidgets.QMainWindow):
         if self.EnableBlank_cbtn.isChecked():
             self.gBox_BlankSubtract.setEnabled(True)
             self.Noise_BlankParams[3] = True
+            self.Noise_BlankParams[3] = self.BlankRatio_sBox.value()
         else:
             self.gBox_BlankSubtract.setEnabled(False)
             self.Noise_BlankParams[3] = False
@@ -141,14 +142,14 @@ class Ui(QtWidgets.QMainWindow):
     # GET NOISE FILTER PARAMETERS
     def GetFilterParams(self):
         if self.EnableFilter_cbtn.isChecked():
-            self.Noise_BlankParams = [True, self.IntensePerc_spinbox.value(), self.BreakCount_spinbox.value(), False, 10]
+            self.Noise_BlankParams = [True, self.IntensePerc_spinbox.value(), self.BreakCount_spinbox.value(), False, self.BlankRatio_sBox.value()]
 
 
     def GetBlankFile(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         files, _ = QFileDialog.getOpenFileNames(
-            self, "Select Blank Spectra", "", "Text Files (*.txt);;csv Files (*.csv)", options=options)
+            self, "Select Blank Spectra", "", "csv Files (*.csv)", options=options)
         if files:
             self.BL_line.setText(files[0])
             self.BlankFilePath = True

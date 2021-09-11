@@ -1,12 +1,13 @@
 
 from PyQt5 import QtCore, QtWidgets, uic
 from PyQt5.QtWidgets import QDialog, QApplication, QFileDialog
-from pathlib import Path
+import pathlib
 import csv
 from element import Element
 import Dialog_IsoOptions
 from FormulaFinder_lib import FormulaFinder, FormulaRefiner
 from PatternSearch_lib import PatternSearch
+from BlankSub_lib import BlankSub
 
 
 class Ui(QDialog):
@@ -34,6 +35,18 @@ class Ui(QDialog):
         self.IsoFind_btn.clicked.connect(self.PatternFinder)
         self.IsoOptions_btn.clicked.connect(self.Pattern_Options)
 
+    # CREATE RESULT FOLDER
+    def Resultsmkdir(self):
+        filepath = pathlib.Path(self.SpectraList[0]).parent
+        self.ResultPath = pathlib.Path(str(filepath) + "\Results")
+        #NEW FOLDER RESULTS
+        try:
+            self.ResultPath.mkdir(parents=True, exist_ok=True)
+        except FileExistsError:
+            pass
+        self.ResultPath = str(self.ResultPath)
+    
+    
     # TABLE READER
     def readTableData(self):
         rowCount = self.tableWidget.rowCount()
@@ -79,14 +92,13 @@ class Ui(QDialog):
     # COMPOUNDS LIST GENERATOR
     def findCompoundList(self):
         self.Search_LB.setText("")
-        tmp_path = (Path(__file__).parent).joinpath("tmp") 
+        tmp_path = (pathlib.Path(__file__).parent).joinpath("tmp") 
         try:
             tmp_path.mkdir(parents=True, exist_ok=True)
         except FileExistsError:
             pass
         
         CompoudsList = []
-        #spectra = []
         if not(self.Pos_RBtn.isChecked() or self.Neg_RBtn.isChecked()):
             QtWidgets.QMessageBox.warning(self, "Warning", "Select spectra polarity to continue")
         else:
@@ -108,8 +120,8 @@ class Ui(QDialog):
                 self.ElFinder_PBar.setValue(index)
                 QApplication.processEvents()
                 CompoudsList = FormulaFinder(spectra, atoms, self.charge, ppm_diff, CompoudsList)
-                CompoudsList.to_csv(str(tmp_path)+ "/" + str(Path(spectra).name), index=False)
-                self.tmpfiles.append(str(tmp_path)+ "/" + str(Path(spectra).name))
+                CompoudsList.to_csv(str(tmp_path)+ "/" + str(pathlib.Path(spectra).name), index=False)
+                self.tmpfiles.append(str(tmp_path)+ "/" + str(pathlib.Path(spectra).name))
             self.Refine_GBox.setEnabled(True)
             self.Search_btn.setEnabled(True)
     
@@ -149,22 +161,24 @@ class Ui(QDialog):
         else:
             if self.ppm_RBtn.isChecked():
                 SearchMode = "ppm"
-                ppm = self.ppm_SPbox.value()
+                ppm = self.ppm_SPbox_F.value()
                 search_property = [SearchMode, ppm]
             if self.dalton_RBtn.isChecked():
                 SearchMode = "dalton"
-                dalton = self.dalton_SPbox.value()
+                dalton = self.dalton_SPbox_F.value()
                 search_property = [SearchMode, dalton]
     
             ##### ###### LOOP WITH PROGRESS BAR TO SEARCH COMPOUDS WITH ISOTOPIC PATTERN MATCH ###### #######  
+            self.Resultsmkdir()
             self.IsoFinder_PBar.reset()
             self.IsoFinder_PBar.setMaximum(len(self.SpectraList))
             self.IsoFind_btn.setEnabled(False)
             for index, (_spectra, _compounds) in enumerate(zip(self.SpectraList, self.tmpfiles_2), 1):
                 self.IsoFinder_PBar.setValue(index)
                 QApplication.processEvents()
-                PatternSearch(_spectra, _compounds, self.adducts, self.charge,  search_property, self.adducts_label, self.FilterProperty, PatternOptions)
+                PatternSearch(_spectra, _compounds, self.ResultPath, self.adducts, self.charge,  search_property, self.adducts_label, self.FilterProperty, self.PatternOptions)
             QtWidgets.QMessageBox.information(self, "Info", "Analysis completed!")
             self.IsoFinder_PBar.reset()
             self.IsoFind_btn.setEnabled(True)
-
+            if self.FilterProperty[3]:
+                BlankSub(self.ResultPath, self.FilterProperty[4])
