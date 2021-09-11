@@ -48,7 +48,7 @@ class Ui(QDialog):
     def openDatabase_Dialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        files, _ = QFileDialog.getOpenFileNames(self, "Select Compounds List file", "", "DAT Files (*.dat);;Text Files (*.txt)", options=options)
+        files, _ = QFileDialog.getOpenFileName(self, "Select Compounds List file", "", "Text Files (*.txt)", options=options)
         if files:
             self.DB_line.setText(files[0])
             self.DB_path = files[0]
@@ -125,7 +125,7 @@ class Ui(QDialog):
     
     # SET ISOTOPIC PATTERN SEARCH OPTIONS
     def Pattern_Options(self):
-        dlg = Dialog_IsoOptions.Ui(self.PatternOptions) #
+        dlg = Dialog_IsoOptions.Ui(self.PatternOptions)
         dlg.exec()
         self.PatternOptions = dlg.SetOptions()
     
