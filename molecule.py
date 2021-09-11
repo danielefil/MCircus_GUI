@@ -28,7 +28,7 @@ class Molecule:
         structure_dict = {}
         for element_details in parsed:
             element = element_details[0]
-            if element_details[1] != '0':    # Escludo gli atomi presenti con degli zeri come pedice 
+            if element_details[1] != "0":    # Escludo gli atomi presenti con degli zeri come pedice 
                 if element not in structure_dict:
                     structure_dict[element] = 0
                 element_count = sum(

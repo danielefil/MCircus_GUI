@@ -1,36 +1,28 @@
 from pathlib import Path
+import numpy as np
 import pandas as pd
 
-def BlankSub(ResultPath, BlankRatio):
+def BlankSub(ResultsPath, BlankRatio):
     FileList = []
-    for _file in Path(ResultPath).glob('*.csv'):
+    for _file in Path(ResultsPath).glob("*.csv"):
         FileList.append(_file)
     
-    blank_df = pd.read_csv(FileList[-1])
-    blank_df['type'] = 'B'
-    test_df = pd.read_csv(FileList[0])
-    test_df['type'] = 'S'
-    
-    
-    #df = pd.merge(blank_df, test_df)
-    df = pd.concat([blank_df, test_df])
-    
-    a = df.groupby('Fromula Bruta').filter(lambda x: x.shape[0] >1)
-    a.sort_values(by='Fromula Bruta')
-    
-    #print(a.sort_values(by=['Fromula Bruta', 'type'], ascending = False))
-    aa = a.groupby('Fromula Bruta')
-    
-    cc = (aa.tail(1)['Intens. Ass.'] / aa.head(1)['Intens. Ass.'])
-    print(type(cc))
-    #for key, item in a:
-    #    print(a.get_group(key))
-    
-    #####################################
-    ########## FOR DEBUG ################
+    df_Blank = pd.read_csv(FileList[-1])
+    df_Sample = pd.read_csv(FileList[0])
+    df_Sample["Ratio"] = np.NaN
+    BlankFormulas = df_Blank["Formula"].tolist()
 
+    for index, row in df_Sample.iterrows():
+        if row["Formula"] in BlankFormulas:
+            df_Sample.at[index, "Ratio"] = (df_Sample.iloc[index]["Abs. Int."])/(df_Blank.iloc[index]["Abs. Int."])
+    
+    df_output = df_Sample[(df_Sample["Ratio"].notna()) & (df_Sample["Ratio"] > BlankRatio)]
+    del(df_output["Ratio"])
+    
+    
+#####################################
+########## FOR DEBUG ################
 
-ResultPath = r'/Users/danielefilippi/Downloads/!!!!Filtri Ivan/Results'
-BlankRatio = 10
-
-BlankSub(ResultPath, BlankRatio)
+#ResultPath = r"C:\Users\df426\Desktop\!!!!Filtri Ivan\Results"
+#BlankRatio = 0.5
+#BlankSub(ResultPath, BlankRatio)

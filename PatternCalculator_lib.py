@@ -1,7 +1,7 @@
-'''
+"""
 Funzione per il calcolo del pattern isotopico inserendo la formula bruta della molecole.
 Utilizzo la libreria pyisopatch per la lettura della molecola e per il calcolo delle masse.
-'''
+"""
 import itertools as it
 #from typing import Pattern
 import numpy as np
@@ -40,7 +40,7 @@ def Multinomial_coeff(combination):
 
 
 
-# Funzione per generare l'output: dopo aver generato l'output si fa un arrotondamento e
+# Funzione per generare l"output: dopo aver generato l"output si fa un arrotondamento e
 # poi si fitrano solo gli isotopi con frequenza maggiore dello 0.01%.
 
 
@@ -61,12 +61,12 @@ def generate_output(raw_weights, raw_ratios, charge: int, MinIntesity: float):
     # Sorting on m/z small -> large
     out = out[out[:, 1].argsort()]
     out = out[::-1]
-    #elimino le intensita' minori di MinIntesity ~ 0.00001 --> 10^-5 volte piu piccole rispetto al principale
+    #elimino le intensita" minori di MinIntesity ~ 0.00001 --> 10^-5 volte piu piccole rispetto al principale
     out = out[np.where(out[:,1] >= MinIntesity)]
     return(out)
     
 
-# Funzione per effettuare un merge dei picchi del pattern isotopico se la loro differenza
+# Funzione per effettuare un merge dei Peaks del pattern isotopico se la loro differenza
 # in massa è inferiore al valore "soglia". Se la condizione è soddisfatta viene effettuata,
 # una media pesata per il valore di m/z e vengono sommate le intensità.
 
@@ -84,9 +84,9 @@ def PatternFilter(input_array, merge_threshold, ratio_threshold):
 
     output_array = output_array[~np.isnan(output_array).all(1)]
     
-    ### ELIMINO I PICCHI SOTTO SOGLIA DI INTENSITA
+    ### ELIMINO I Peaks SOTTO SOGLIA DI INTENSITA
     output_array = output_array[np.where(output_array[:, 1] >= ratio_threshold)]
-    ### RINORMALIZZO DOPO AVER UNITO I PICCHI
+    ### RINORMALIZZO DOPO AVER UNITO I Peaks
     #output_array[:, 1] /= output_array[:, 1].max()
     
     #output_array = output_array[output_array[:, 1].argsort()]
@@ -149,6 +149,6 @@ def Patter_Calculator(molecola: str, charge: int, PatternOptions: list):
 
 
 #Single molecule
-#c =Patter_Calculator(molecola='FeC5N5H40Hp', charge=-1, merge_threshold=0.0005, ratio_threshold=0.001)
+#c =Patter_Calculator(molecola="FeC5N5H40Hp", charge=-1, merge_threshold=0.0005, ratio_threshold=0.001)
 
 

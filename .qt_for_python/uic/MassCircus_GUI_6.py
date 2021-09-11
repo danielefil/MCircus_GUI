@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\df426\Documents\MCircus_GUI\MassCircus_GUI_6.ui'
+# Form implementation generated from reading ui file "c:\Users\df426\Documents\MCircus_GUI\MassCircus_GUI_6.ui"
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #

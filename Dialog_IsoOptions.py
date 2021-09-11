@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QDialog
 class Ui(QDialog):
     def __init__(self, OptionsList, parent = None):   
         super(Ui, self).__init__(parent) # Call the inherited classes __init__ method
-        uic.loadUi('Dialog_PatternOptions.ui', self) # Load the .ui file
+        uic.loadUi("Ui/Dialog_PatternOptions.ui", self) # Load the .ui file
         self.setWindowTitle("Isotopic pattern Options")
 
         # INIT GLOBAL VARIABLES AND OPTIONS

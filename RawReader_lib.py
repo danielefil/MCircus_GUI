@@ -1,15 +1,15 @@
 import platform
-if platform.system() == 'Windows':
+if platform.system() == "Windows":
     import pythoncom
     pythoncom.CoInitialize()
 
 import clr
 
-clr.AddReference('System.Collections')
-clr.AddReference('RawReader_dll/ThermoFisher.CommonCore.Data')
-clr.AddReference('RawReader_dll/ThermoFisher.CommonCore.RawFileReader')
-clr.AddReference('RawReader_dll/ThermoFisher.CommonCore.BackgroundSubtraction')
-clr.AddReference('RawReader_dll/ThermoFisher.CommonCore.MassPrecisionEstimator')
+clr.AddReference("System.Collections")
+clr.AddReference("RawReader_dll/ThermoFisher.CommonCore.Data")
+clr.AddReference("RawReader_dll/ThermoFisher.CommonCore.RawFileReader")
+clr.AddReference("RawReader_dll/ThermoFisher.CommonCore.BackgroundSubtraction")
+clr.AddReference("RawReader_dll/ThermoFisher.CommonCore.MassPrecisionEstimator")
 
 from ThermoFisher.CommonCore.Data import ToleranceUnits
 from ThermoFisher.CommonCore.Data import Extensions
@@ -43,14 +43,14 @@ def getScanFilter(rawfile):
 
 
 def GetAverage(rawFile, scanFilter):
-    '''Gets the average spectrum from the RAW file.
+    """Gets the average spectrum from the RAW file.
 
     Args:
         rawFile (IRawDataPlus): the RAW file being read.
         firstScanNumber (int): the first scan to consider for the averaged spectrum.
         lastScanNumber (int): the last scan to consider for the averaged spectrum.
         outputData (bool): the output data flag.
-    '''
+    """
     _rawFile = RawFileReaderAdapter.FileFactory(rawFile)
     _rawFile.SelectInstrument(Device.MS, 1)
     
@@ -75,11 +75,11 @@ def GetAverage(rawFile, scanFilter):
         _rawFile, firstScanNumber, lastScanNumber, scanFilter, options)
 
     if averageScan.HasCentroidStream:
-        print('Average spectrum ({} points)'.format(averageScan.CentroidScan.Length))
+        print("Average spectrum ({} points)".format(averageScan.CentroidScan.Length))
 
         # Print the spectral data (mass, intensity values)
         for i in range(averageScan.CentroidScan.Length):
-            print('  {:.4f} {:.0f}'.format(averageScan.CentroidScan.Masses[i], averageScan.CentroidScan.Intensities[i]))
+            print("  {:.4f} {:.0f}".format(averageScan.CentroidScan.Masses[i], averageScan.CentroidScan.Intensities[i]))
 
 
 # Get a average spectrum from the RAW file for the first 15 scans in the file.
@@ -90,5 +90,5 @@ def GetAverage(rawFile, scanFilter):
 #### FOR DEBUG ####
 ###################
 
-#print(getScanFilter(r'C:/Users/df426/Desktop/RawReader_Py/GSH_NEM_Full_Scan_60K_FTMS.raw'))
-#GetAverage(r'C:/Users/df426/Desktop/RawReader_Py/GSH_NEM_Full_Scan_60K_FTMS.raw', 1, 15, False)
+#print(getScanFilter(r"C:/Users/df426/Desktop/RawReader_Py/GSH_NEM_Full_Scan_60K_FTMS.raw"))
+#GetAverage(r"C:/Users/df426/Desktop/RawReader_Py/GSH_NEM_Full_Scan_60K_FTMS.raw", 1, 15, False)

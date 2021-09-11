@@ -6,7 +6,7 @@ import numpy as np
 def del_repetition(text: str):
     parsed = re.findall(r"([A-Z][a-z]*)(\d*)|(\()|(\))(\d*)", text)
     structure_dict = {}
-    output = ''
+    output = ""
     for element_details in parsed:
         element = element_details[0]
         if element not in structure_dict:

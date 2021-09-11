@@ -36,30 +36,30 @@ def ppm_calc(m1, m2):
 ### RATIOS CALCULATOR ###
 def ratio_calc(formula, atom):
     l = dict(re.findall("(\D+)(\d+)", formula))
-    ratios = int(l.get(atom, 0))/int(l.get('C', 0))
+    ratios = int(l.get(atom, 0))/int(l.get("C", 0))
     return ratios
 
 def carbon(formula):
     l = dict(re.findall("(\D+)(\d+)", formula))
-    _carbon = l.get('C', 0)
+    _carbon = l.get("C", 0)
     return (_carbon)
 
 ### CLEANER - Rimuove gli atomi con pedice 0 -
 def cleaner(formula):
     parsed = re.findall(r"([A-Z][a-z]*)(\d*)|(\()|(\))(\d*)", formula)
-    cleand_formula = ''
+    cleand_formula = ""
     for element_details in parsed:
         element = element_details[0]
         element_count = element_details[1]
-        if element_count != '0':
+        if element_count != "0":
             cleand_formula = cleand_formula + element + element_count
-    if cleand_formula != '':
+    if cleand_formula != "":
         return cleand_formula
     else:
         return None
 
 ### DECOMPOSER ###
-def decomposer(Mtot, atoms, limits, mass=0, formula='', output=[]):
+def decomposer(Mtot, atoms, limits, mass=0, formula="", output=[]):
     if atoms != []:
         if Mtot >= atoms[0].Mass:
             Nmax = int(min(atoms[0].Max, (Mtot)//atoms[0].Mass))
@@ -87,31 +87,31 @@ def decomposer(Mtot, atoms, limits, mass=0, formula='', output=[]):
 def Calc_filter(df_results, charge: int, filtri: dict):
 
     ## pulisco le formule
-    df_results['Formula'] = df_results['Formula'].apply(cleaner)
+    df_results["Formula"] = df_results["Formula"].apply(cleaner)
 
     ## pulisco le formule senza carbonio
     df_results = df_results.drop(
-        df_results[df_results['Formula'].apply(carbon) == 0].index)
+        df_results[df_results["Formula"].apply(carbon) == 0].index)
 
     ## calcolo la differenza in ppm
     #FRO M+ and M-
     adduct_corr = charge*0.00054387
-    df_results['ppm'] = df_results.apply(lambda x: ppm_calc(x['m/z'], (x['Neutral Mass']-adduct_corr)), axis=1)
+    df_results["ppm"] = df_results.apply(lambda x: ppm_calc(x["m/z"], (x["Neutral Mass"]-adduct_corr)), axis=1)
     #FOR PROTONATION ADN DEPROTONATION
     #adduct_corr = charge*1.0072764
-    #df_results['ppm'] = df_results.apply(lambda x: ppm_calc(x['m/z'], (x['Neutral Mass']+adduct_corr)), axis=1)
+    #df_results["ppm"] = df_results.apply(lambda x: ppm_calc(x["m/z"], (x["Neutral Mass"]+adduct_corr)), axis=1)
 
     for key, values in filtri.items():
-        if key == 'DBE':
+        if key == "DBE":
             ## calcolo DBE
-            df_results[key] = df_results['Formula'].apply(DBE)
+            df_results[key] = df_results["Formula"].apply(DBE)
             df_results = df_results[(df_results[key] >= values[0]) & (
                 df_results[key] <= values[1])]
         else:
-            df_results[key + '/C'] = df_results.apply(
-                lambda x: ratio_calc(x['Formula'], key), axis=1)
+            df_results[key + "/C"] = df_results.apply(
+                lambda x: ratio_calc(x["Formula"], key), axis=1)
             df_results = df_results[(
-                df_results[key + '/C'] >= values[0]) & (df_results[key + '/C'] <= values[1])]
+                df_results[key + "/C"] >= values[0]) & (df_results[key + "/C"] <= values[1])]
             #print(key, values[0], values[1])
 
     df_results = df_results.reset_index(drop=False)
@@ -123,20 +123,20 @@ def Calc_filter(df_results, charge: int, filtri: dict):
 ######################################
 
 
-#S = Atom('S', 'Sulfur', 31.97207069, 0, 2)
-#N = Atom('N', 'Nitrogen', 14.0030740052, 0, 5)
-Cr = Atom('Cr', 'Crome', 51.9405119, 1, 3)
-O = Atom('O', 'Oxygen', 15.9949146221, 1, 50)
-C = Atom('C', 'Carbon', 12.0, 1, 50)
-H = Atom('H', 'Hydrogen', 1.0078250321, 1, 50)
+#S = Atom("S", "Sulfur", 31.97207069, 0, 2)
+#N = Atom("N", "Nitrogen", 14.0030740052, 0, 5)
+Cr = Atom("Cr", "Crome", 51.9405119, 1, 3)
+O = Atom("O", "Oxygen", 15.9949146221, 1, 50)
+C = Atom("C", "Carbon", 12.0, 1, 50)
+H = Atom("H", "Hydrogen", 1.0078250321, 1, 50)
 
 
 ## WIN PATH
-spectrum_path = r'C:\Users\df426\Desktop\AnalisiCromo\Spectra\Part2_2020_7_3_cromoacetato_gallico_1a3_h2o_meoh_1a100_400-2000_NEG.csv'
+spectrum_path = r"C:\Users\df426\Desktop\AnalisiCromo\Spectra\Part2_2020_7_3_cromoacetato_gallico_1a3_h2o_meoh_1a100_400-2000_NEG.csv"
 ## MAC PATH
-#spectrum_path = '/Users/danielefilippi/Desktop/negF1S1_100-650_cleaned.csv'
+#spectrum_path = "/Users/danielefilippi/Desktop/negF1S1_100-650_cleaned.csv"
 
-df_sp = pd.read_csv(spectrum_path, dtype={'Mass [m/z]': float, 'Intensity': float})
+df_sp = pd.read_csv(spectrum_path, dtype={"Mass [m/z]": float, "Intensity": float})
 #spectra = np.round(df_sp.to_numpy(), 5)
 spectra = df_sp.to_numpy()
 
@@ -146,7 +146,7 @@ ppm = 10
 out = []
 charge = -1 ##oppure -1
 
-widgets = [' <<<', Bar(),'>>> ', Percentage(), ' ', ETA()]
+widgets = [" <<<", Bar(),">>> ", Percentage(), " ", ETA()]
 pbar = ProgressBar(widgets=widgets)
 
 #for values in spectra:
@@ -163,14 +163,14 @@ for values in pbar(spectra):
         for iii in Formulas:
             out.append([values[0], values[1], iii[0], iii[1]])
     
-df_output = pd.DataFrame(out, columns=['m/z', 'Intensity' , 'Formula', 'Neutral Mass'])
+df_output = pd.DataFrame(out, columns=["m/z", "Intensity" , "Formula", "Neutral Mass"])
 
 # lista contenete gli atomi sui quali voglio calcolare i rapporti con il carbonio
-ratios = {'DBE': (1,25), 'O': (0.4,3), 'H': (0.5, 3), 'S': (0, 0.2)}
+ratios = {"DBE": (1,25), "O": (0.4,3), "H": (0.5, 3), "S": (0, 0.2)}
 df_output = Calc_filter(df_output, charge, ratios)
 
 df_output.to_csv(
-    r'C:\Users\df426\Desktop\Part2_2020_7_3_cromoacetato_gallico_1a3_h2o_meoh_1a100_400-2000_NEG.csv')
+    r"C:\Users\df426\Desktop\Part2_2020_7_3_cromoacetato_gallico_1a3_h2o_meoh_1a100_400-2000_NEG.csv")
 
 
 

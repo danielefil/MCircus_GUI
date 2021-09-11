@@ -12,7 +12,7 @@ from PatternSearch_lib import PatternSearch
 class Ui(QDialog):
     def __init__(self, FileList, FilterOptions, parent = None):   
         super(Ui, self).__init__(parent) # Call the inherited classes __init__ method
-        uic.loadUi('Dialog_FormulaFinder.ui', self) # Load the .ui file
+        uic.loadUi("Ui/Dialog_FormulaFinder.ui", self) # Load the .ui file
         self.setWindowTitle("Compound Formula Finder")
         self.show()
         
@@ -78,8 +78,8 @@ class Ui(QDialog):
 
     # COMPOUNDS LIST GENERATOR
     def findCompoundList(self):
-        self.Search_LB.setText('')
-        tmp_path = (Path(__file__).parent).joinpath('tmp') 
+        self.Search_LB.setText("")
+        tmp_path = (Path(__file__).parent).joinpath("tmp") 
         try:
             tmp_path.mkdir(parents=True, exist_ok=True)
         except FileExistsError:
@@ -108,8 +108,8 @@ class Ui(QDialog):
                 self.ElFinder_PBar.setValue(index)
                 QApplication.processEvents()
                 CompoudsList = FormulaFinder(spectra, atoms, self.charge, ppm_diff, CompoudsList)
-                CompoudsList.to_csv(str(tmp_path)+ '/' + str(Path(spectra).name), index=False)
-                self.tmpfiles.append(str(tmp_path)+ '/' + str(Path(spectra).name))
+                CompoudsList.to_csv(str(tmp_path)+ "/" + str(Path(spectra).name), index=False)
+                self.tmpfiles.append(str(tmp_path)+ "/" + str(Path(spectra).name))
             self.Refine_GBox.setEnabled(True)
             self.Search_btn.setEnabled(True)
     
@@ -117,11 +117,11 @@ class Ui(QDialog):
     def selectFilter(self):
         self.ratios = {}
         if self.DBE_CBox.isChecked():
-            self.ratios['DBE'] = (self.DBE_min_SBox.value(), self.DBE_max_SBox.value())
+            self.ratios["DBE"] = (self.DBE_min_SBox.value(), self.DBE_max_SBox.value())
         if self.HC_CBox.isChecked():
-            self.ratios['H'] = (self.HC_min_SBox.value(), self.HC_max_SBox.value())
+            self.ratios["H"] = (self.HC_min_SBox.value(), self.HC_max_SBox.value())
         if self.OC_CBox.isChecked():
-            self.ratios['O'] = (self.OC_min_SBox.value(), self.OC_max_SBox.value())
+            self.ratios["O"] = (self.OC_min_SBox.value(), self.OC_max_SBox.value())
     
     # REFINE THE COMPOUNDS FINDED BY COMPOUND GENERATOR
     def refineCompoundList(self):
@@ -148,11 +148,11 @@ class Ui(QDialog):
             QtWidgets.QMessageBox.warning(self, "Warning", "Select ppm or dalton mode")
         else:
             if self.ppm_RBtn.isChecked():
-                SearchMode = 'ppm'
+                SearchMode = "ppm"
                 ppm = self.ppm_SPbox.value()
                 search_property = [SearchMode, ppm]
             if self.dalton_RBtn.isChecked():
-                SearchMode = 'dalton'
+                SearchMode = "dalton"
                 dalton = self.dalton_SPbox.value()
                 search_property = [SearchMode, dalton]
     

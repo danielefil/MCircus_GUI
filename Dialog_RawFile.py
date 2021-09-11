@@ -7,7 +7,7 @@ import sys
 class Ui(QDialog):
     def __init__(self, FileList, parent = None):   
         super(Ui, self).__init__(parent) # Call the inherited classes __init__ method
-        uic.loadUi('RawFilter.ui', self) # Load the .ui file
+        uic.loadUi("RawFilter.ui", self) # Load the .ui file
         self.setWindowTitle("Filter Selector")
         #CONNECTION
         self.SP_CBox.currentIndexChanged.connect(self.SelectionChange)

@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QDialog
 class Ui(QDialog):
     def __init__(self, FileList, parent = None):   
         super(Ui, self).__init__(parent) # Call the inherited classes __init__ method
-        uic.loadUi('FilterDialog.ui', self) # Load the .ui file
+        uic.loadUi("Ui/FilterDialog.ui", self) # Load the .ui file
         self.setWindowTitle("Filter Selector")
         #CONNECTION
         self.SP_CBox.currentIndexChanged.connect(self.SelectionChange)
@@ -29,7 +29,7 @@ class Ui(QDialog):
         self.selectedFilter = self.Filter_CBox.currentText()
         self.NewFileList = []
         
-        tmp_path = (Path(__file__).parent).joinpath('tmp') 
+        tmp_path = (Path(__file__).parent).joinpath("tmp") 
         try:
             tmp_path.mkdir(parents=True, exist_ok=True)
         except FileExistsError:

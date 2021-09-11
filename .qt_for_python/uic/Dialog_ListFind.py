@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\df426\Documents\MCircus_GUI\Dialog_ListFind.ui'
+# Form implementation generated from reading ui file "c:\Users\df426\Documents\MCircus_GUI\Dialog_ListFind.ui"
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #

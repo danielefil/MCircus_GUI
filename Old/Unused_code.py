@@ -35,12 +35,12 @@
             files, _ = QFileDialog.getOpenFileNames(self, "Select Elemental Composition file", "", "CSV Files (*.csv);;Text Files (*.txt)", options=options)
             if files:
                 self.EC_line.setText(files[0])
-                self.FindMethod = ['EC', files[0]]
+                self.FindMethod = ["EC", files[0]]
         else:
             files, _ = QFileDialog.getOpenFileNames(self, "Select Compounds List file", "", "CSV Files (*.csv);;Text Files (*.txt)", options=options)    
             if files:
                 self.DB_line.setText(files[0])
-                self.FindMethod = ['DB', files[0]]
+                self.FindMethod = ["DB", files[0]]
         print(self.test)
 
     
@@ -65,10 +65,10 @@
         self.filterValues[2] = self.ui.BreakCount_spinbox.value()
         self.ppm_tolletance = self.ui.ppm_spinbox.value()
         self.da_tolletance = self.ui.dalton_spinbox.value()
-        if self.search_mode == 'ppm':
-            self.search_property = ['ppm', self.ui.ppm_spinbox.value()]
+        if self.search_mode == "ppm":
+            self.search_property = ["ppm", self.ui.ppm_spinbox.value()]
         else:
-            self.search_property = ['dalton', self.ui.dalton_spinbox.value()]
+            self.search_property = ["dalton", self.ui.dalton_spinbox.value()]
 
         if (self.ui.DB_line.text() and self.ui.SP_line.text()) != "":
             FilesList = []
@@ -77,6 +77,6 @@
                 FilesList.append(CurrentFile)
             search_peak(FilesList, self.DB_path, self.addotti, self.carica,
                         self.search_property, self.addotti_label, Filtering=self.filterValues)
-            print('Complete :-)')
+            print("Complete :-)")
         else:
             QtWidgets.QMessageBox.warning(self, "Warning", "Input files are missing")          

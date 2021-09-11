@@ -9,7 +9,7 @@ import pathlib
 class Ui(QDialog):
     def __init__(self, FileList, FilterOptions, parent = None):   
         super(Ui, self).__init__(parent) # Call the inherited classes __init__ method
-        uic.loadUi("Dialog_ListFinder.ui", self) # Load the .ui file
+        uic.loadUi("Ui/Dialog_ListFinder.ui", self) # Load the .ui file
         self.setWindowTitle("Compound List Finder")
         self.show()
         
@@ -36,7 +36,7 @@ class Ui(QDialog):
     # CREATE RESULT FOLDER
     def Resultsmkdir(self):
         filepath = pathlib.Path(self.SpectraList[0]).parent
-        self.ResultPath = pathlib.Path(str(filepath) + '\Results')
+        self.ResultPath = pathlib.Path(str(filepath) + "\Results")
         #NEW FOLDER RESULTS
         try:
             self.ResultPath.mkdir(parents=True, exist_ok=True)
@@ -135,11 +135,11 @@ class Ui(QDialog):
             QtWidgets.QMessageBox.warning(self, "Warning", "Select ppm or dalton mode")
         else:
             if self.ppm_RBtn.isChecked():
-                SearchMode = 'ppm'
+                SearchMode = "ppm"
                 ppm = self.ppm_SPbox.value()
                 search_property = [SearchMode, ppm]
             if self.dalton_RBtn.isChecked():
-                SearchMode = 'dalton'
+                SearchMode = "dalton"
                 dalton = self.dalton_SPbox.value()
                 search_property = [SearchMode, dalton]
     

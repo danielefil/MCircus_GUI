@@ -1,6 +1,6 @@
 #import RawReader_lib
-from PyQt5 import QtCore, QtGui, QtWidgets, uic
-from PyQt5.QtWidgets import QDialog, QMainWindow, QApplication, QFileDialog
+from PyQt5 import QtWidgets, uic
+from PyQt5.QtWidgets import QFileDialog
 from pathlib import Path
 import sys
 
@@ -18,7 +18,7 @@ import Dialog_DBFinder
 class Ui(QtWidgets.QMainWindow):
     def __init__(self):   
         super(Ui, self).__init__() # Call the inherited classes __init__ method
-        uic.loadUi('MassCircus_GUI_7.ui', self) # Load the .ui file
+        uic.loadUi("Ui/MassCircus_GUI_7.ui", self) # Load the .ui file
         
         # INIT FUNCTIONS
         self.show() # Show the GUI
@@ -28,7 +28,7 @@ class Ui(QtWidgets.QMainWindow):
         # GLOBAL VARIABLES
         self.Spectralist = []
         self.fileext = None
-        self.SpectraPath = ''
+        self.SpectraPath = ""
         self.BlankFilePath = False
         self.Noise_BlankParams = [False, 0, 0, False, 10]
         self.FindMethod = []
@@ -69,7 +69,7 @@ class Ui(QtWidgets.QMainWindow):
 
     
     def nextTab(self):
-        if self.SpectraPath == '':    
+        if self.SpectraPath == "":    
             QtWidgets.QMessageBox.warning(self, "Warning", "Select spectra folder to continue")
         else:    
             currentTab = self.tabWidget.currentIndex()
@@ -91,11 +91,11 @@ class Ui(QtWidgets.QMainWindow):
     # FILES TYPE SELECTOR 
     def fileextension(self):
         if self.csv_rdbtn.isChecked() == True:
-            self.fileext = '*.csv'
+            self.fileext = "*.csv"
         if self.raw_rdbtn.isChecked() == True:
-            self.fileext = '*.raw'
+            self.fileext = "*.raw"
         if self.mzML_rdbtn.isChecked() == True:
-            self.fileext = '*.mzML'
+            self.fileext = "*.mzML"
 
     # OPEN FILES DIALOG - SPECTRA (MULTIPLE)
     def openSpectraDialog(self):
@@ -111,11 +111,11 @@ class Ui(QtWidgets.QMainWindow):
         
                 for _file in self.SpectraPath.glob(self.fileext):
                     self.Spectralist.append(_file)
-                if self.fileext == '*.raw':
+                if self.fileext == "*.raw":
                     # Apro finestra per selezione dei filtri
                     RAW_Dialog = Dialog_RawFile.Ui(self.Spectralist)
                     RAW_Dialog.exec()
-                elif self.fileext == '*.mzML':
+                elif self.fileext == "*.mzML":
                     mzML_Dialog = Dialog_mzMLFile.Ui(self.Spectralist)
                     mzML_Dialog.exec()
     #### Devo ritornare self.spectralist con i dati *.csv 
@@ -148,7 +148,7 @@ class Ui(QtWidgets.QMainWindow):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         files, _ = QFileDialog.getOpenFileNames(
-            self, "Select Blank Spectra", "", "csv Files (*.csv);;Text Files (*.txt)", options=options)
+            self, "Select Blank Spectra", "", "Text Files (*.txt);;csv Files (*.csv)", options=options)
         if files:
             self.BL_line.setText(files[0])
             self.BlankFilePath = True

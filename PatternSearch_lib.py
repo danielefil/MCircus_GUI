@@ -33,7 +33,7 @@ def gaussian_diff(params, x, y):
 # APPLY NOISE FILTER ALGORITHM (FOR NOISE ESTIMATION USING SCIPY.OPTIMIZE)
 def Apply_filterZ(spectra_df, parameters: list):
     _maxIntenseLimit = spectra_df.quantile(parameters[1])
-    _filter = spectra_df['Intensity'] < _maxIntenseLimit[1]
+    _filter = spectra_df["Intensity"] < _maxIntenseLimit[1]
     
     filtered = spectra_df[_filter].to_numpy() 
 
@@ -49,7 +49,7 @@ def Apply_filterZ(spectra_df, parameters: list):
     except RuntimeError:
         noise = 1
 
-    _noisefilter = spectra_df['Intensity'] >= noise
+    _noisefilter = spectra_df["Intensity"] >= noise
     spectra_df_filtered = spectra_df[_noisefilter]
 
     print(len(spectra_df) ,len(spectra_df_filtered))
@@ -66,23 +66,23 @@ def adduct_generator(adducts: list, adduct_label: list, charge: int):
         for i_Lc, i_Ec in zip(label_comb, elem_comb):
             if charge > 0:
                 # [Formula, carica, label]
-                _adductsList.append([i, ''.join(i_Ec), ''.join(i_Lc)])
+                _adductsList.append([i, "".join(i_Ec), "".join(i_Lc)])
             else:
                 # [Formula, carica, label]
-                _adductsList.append([-i, ''.join(i_Ec), ''.join(i_Lc)])
+                _adductsList.append([-i, "".join(i_Ec), "".join(i_Lc)])
     # np array con gli addotti - [Charge, Elements, Labels]
     _adducts = np.array(_adductsList)
     return(_adducts)
 
 
 
-#### RICERCA PICCHI ##########
+#### RICERCA Peaks ##########
 
 def diff(spectra, Cmp_MoC, thold, mode):
-    if mode == 'ppm':
+    if mode == "ppm":
         _diff = np.absolute((spectra - Cmp_MoC) * 1000000 / Cmp_MoC)
         min_diff = np.amin(_diff)
-    elif mode == 'dalton':
+    elif mode == "dalton":
         _diff = np.absolute(spectra - Cmp_MoC)
         min_diff = np.amin(_diff)
 
@@ -98,10 +98,10 @@ def find_pattern(theo_pattern, spectra: np.array, _diff: int, search_mode: str):
     pattern_tbl = np.empty((0, 4), float)
     exp_p = 0
     for iso_molecule in theo_pattern:
-        if search_mode == 'ppm':
-            find_iso = diff(spectra[:, 0], iso_molecule[0], _diff, 'ppm')
+        if search_mode == "ppm":
+            find_iso = diff(spectra[:, 0], iso_molecule[0], _diff, "ppm")
         else:
-            find_iso = diff(spectra[:, 0], iso_molecule[0], _diff, 'dalton')
+            find_iso = diff(spectra[:, 0], iso_molecule[0], _diff, "dalton")
         if find_iso != None:
             # lista output: m/z sperimentale, int. sperimentale, m/z teorico, ubt. teorico
             exp_p += 1
@@ -114,14 +114,14 @@ def find_pattern(theo_pattern, spectra: np.array, _diff: int, search_mode: str):
             ls = [0, 0, iso_molecule[0], iso_molecule[1]]
             pattern_tbl = np.vstack((pattern_tbl, np.array(ls)))
     
-    # Normalizzo il pattern isotopico solo se trovo dei picchi corrispondenti
+    # Normalizzo il pattern isotopico solo se trovo dei Peaks corrispondenti
     #if pattern_tbl[:, 1] != 0:
-    #np.seterr(all='warn')
+    #np.seterr(all="warn")
     pattern_tbl[:, 1] /= pattern_tbl[0, 1]
-    #input('Press any key to continue...')
+    #input("Press any key to continue...")
 
 
-    findedpeaks = str(exp_p) + ' of ' + str(len(theo_pattern))
+    findedpeaks = str(exp_p) + " of " + str(len(theo_pattern))
     accord = accordance(pattern_tbl)
     return(accord, pattern_tbl, findedpeaks)
 
@@ -171,15 +171,15 @@ def pattern_score(pattern_tbl: np.array):
 
 # SAVE PATTERN
 def SaveOutput(output_list, input_filepath, ResultPath, Diff):
-    colnames = ['PM', 'm/z(teorico)', 'm/z(trovato)', Diff, 'Intens. Ass.', 'Fromula Bruta', 'Addotto', 'Accordo', 'Score', 'Picchi']
+    colnames = ["PM", "m/z(teorico)", "m/z(trovato)", Diff, "Abs. Int.", "Formula", "Adduct", "Accordo", "Score", "Peaks"]
     output_df = pd.DataFrame.from_records(output_list, columns=colnames)
        
     filename = Path(input_filepath).stem
     #filepath = Path(input_filepath).parent
     
-    outputstring = str(ResultPath)+'/RESULTS_'+ filename +'.csv'
+    outputstring = str(ResultPath)+"/RESULTS_"+ filename +".csv"
 
-    filtro = output_df['Accordo'] > 0.1
+    filtro = output_df["Accordo"] > 0.1
     output_df[filtro].to_csv(outputstring, index=False)
 
 
@@ -188,7 +188,7 @@ def SaveOutput(output_list, input_filepath, ResultPath, Diff):
 def PatternSearch(spectrum_path: str, database_path: str, ResultPath:str, adduct_list: list, charge,  search_property: list, label_list: list, Filtering: list, PatternOptions:list):
     print(ResultPath)
     # Leggo il file che contiene la lista di composti da cercare ## DATABASE ##
-    df_db = pd.read_csv(database_path, sep='\t', dtype={'Formula': str, 'Mass': float})
+    df_db = pd.read_csv(database_path, sep="\t", dtype={"Formula": str, "Mass": float})
     database = df_db.to_numpy()
 
     # Genero gli addotti
@@ -209,10 +209,10 @@ def PatternSearch(spectrum_path: str, database_path: str, ResultPath:str, adduct
 
 
    ################################### for spectrum_path in spectra_path:
-    df_sp = pd.read_csv(spectrum_path, dtype={'Mass [m/z]': float, 'Intensity': float})
+    df_sp = pd.read_csv(spectrum_path, dtype={"Mass [m/z]": float, "Intensity": float})
         
         
-    # Filtraggio delle intensita basata sul Arthur's method
+    # Filtraggio delle intensita basata sul Arthur"s method
     if Filtering[0]:
         df_sp = Apply_filterZ(df_sp, Filtering)
         print("filtering == ON")
@@ -223,7 +223,7 @@ def PatternSearch(spectrum_path: str, database_path: str, ResultPath:str, adduct
     output = []
         
     for ii, Comp in enumerate(CmpsToFind):
-        if search_property[0] == 'ppm':
+        if search_property[0] == "ppm":
             # FIND 1 - Cerco i valori per i quali il ppm è minore di un valore
             find = diff(_spectra.mz, Comp.MoC, search_property[1], search_property[0])
             
@@ -234,12 +234,12 @@ def PatternSearch(spectrum_path: str, database_path: str, ResultPath:str, adduct
                 # Find the isotopic pattern
                 accordance, pattern_tbl, findedrate = find_pattern(pattern_t, spectra, search_property[1], search_property[0])                    
                 score = pattern_score(pattern_tbl)
-                #                 PM     m/z(teorico)    m/z(trovato)            Diff         intens. Ass.        Formula Bruta  Addotto     Accordo   Score    Picchi
+                #                 PM     m/z(teorico)    m/z(trovato)            Diff         Abs. Int.        Formula Bruta  Adduct     Accordo   Score    Peaks
                 output.append([Comp.mass, Comp.MoC, float(_spectra.mz[find[0]]), find[1], float(_spectra.int[find[0]]), Comp.mol, Comp.label, accordance, score, findedrate])
             else:
                 pass
                     
-        elif search_property[0] == 'dalton':
+        elif search_property[0] == "dalton":
             # FIND 2 - Cerco i valori per i quali la massa è compresa tra un intervallo
             find = diff(spectra[:, 0], Comp.MoC, search_property[1], search_property[0])
             if find != None:
@@ -249,12 +249,12 @@ def PatternSearch(spectrum_path: str, database_path: str, ResultPath:str, adduct
                 # Find the isotopic pattern
                 accordance, pattern_tbl, findedrate = find_pattern(pattern_t, spectra, search_property[1], search_property[0])
                 score = pattern_score(pattern_tbl)
-                #                 PM     m/z(teorico)    m/z(trovato)            Diff         intens. Ass.        Formula Bruta  Addotto     Accordo   Score    Picchi
+                #                 PM     m/z(teorico)    m/z(trovato)            Diff         Abs. Int.        Formula Bruta  Adduct     Accordo   Score    Peaks
                 output.append([Comp.mass, Comp.MoC, float(_spectra.mz[find[0]]), find[1], float(_spectra.int[find[0]]), Comp.mol, Comp.label, accordance, score, findedrate])
             else:
                 pass                
             #else:
-             #   print('Error !!!')
-              #  break # da implementare errore?? Return('Error')
+             #   print("Error !!!")
+              #  break # da implementare errore?? Return("Error")
         
-    SaveOutput(output, spectrum_path, ResultPath, Diff='Diff('+search_property[0]+')')
+    SaveOutput(output, spectrum_path, ResultPath, Diff="Diff("+search_property[0]+")")

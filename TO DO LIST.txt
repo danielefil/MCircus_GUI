@@ -1,4 +1,4 @@
 Version 7.0
 
 Implementare lettura file *.raw e *.mzML
-Aggiungere filtro intensita' nella finestra di ricerca Element research
+Aggiungere filtro intensita" nella finestra di ricerca Element research
