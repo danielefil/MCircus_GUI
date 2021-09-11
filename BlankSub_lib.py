@@ -11,18 +11,26 @@ def BlankSub(ResultPath, BlankRatio):
     test_df = pd.read_csv(FileList[0])
     test_df['type'] = 'S'
     
+    
     #df = pd.merge(blank_df, test_df)
     df = pd.concat([blank_df, test_df])
+    
     a = df.groupby('Fromula Bruta').filter(lambda x: x.shape[0] >1)
     a.sort_values(by='Fromula Bruta')
-    print(a.sort_values(by=['Fromula Bruta', 'type'], ascending = False))
+    
+    #print(a.sort_values(by=['Fromula Bruta', 'type'], ascending = False))
+    aa = a.groupby('Fromula Bruta')
+    
+    cc = (aa.tail(1)['Intens. Ass.'] / aa.head(1)['Intens. Ass.'])
+    print(type(cc))
     #for key, item in a:
     #    print(a.get_group(key))
     
     #####################################
     ########## FOR DEBUG ################
 
-ResultPath = r'C:\Users\df426\Desktop\!!!!Filtri Ivan\Results'
+
+ResultPath = r'/Users/danielefilippi/Downloads/!!!!Filtri Ivan/Results'
 BlankRatio = 10
 
 BlankSub(ResultPath, BlankRatio)
