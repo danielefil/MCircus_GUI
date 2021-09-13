@@ -1,7 +1,7 @@
 import re
 import pandas as pd
 import numpy as np
-from pandas.core.indexes.base import Index
+#from pandas.core.indexes.base import Index
 
 ### DBE CALCULATOR ###
 def DBE(formula):

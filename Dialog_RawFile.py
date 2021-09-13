@@ -1,8 +1,6 @@
 import RawReader_lib
-from PyQt5 import QtCore, QtGui, QtWidgets, uic
-from PyQt5.QtWidgets import QDialog, QMainWindow, QApplication, QFileDialog
-from pathlib import Path
-import sys
+from PyQt5 import uic
+from PyQt5.QtWidgets import QDialog
 
 class Ui(QDialog):
     def __init__(self, FileList, parent = None):   

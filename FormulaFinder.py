@@ -1,9 +1,9 @@
-import time
-from element import Element
+#import time
+#from element import Element
 import re
 import pandas as pd
 import numpy as np
-from progressbar import ProgressBar, ETA, FileTransferSpeed, Bar, Percentage
+
 
 
 ### ATOM CLASS ###
@@ -146,11 +146,9 @@ ppm = 10
 out = []
 charge = -1 ##oppure -1
 
-widgets = [" <<<", Bar(),">>> ", Percentage(), " ", ETA()]
-pbar = ProgressBar(widgets=widgets)
 
 #for values in spectra:
-for values in pbar(spectra):
+for values in spectra:
     output = []
     delta = delta_ppm_converter(values[0], ppm)
     # Inizzate 
