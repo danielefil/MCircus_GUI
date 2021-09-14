@@ -148,6 +148,7 @@ class Ui(QDialog):
             self.IsoFinder_PBar.reset()
             self.IsoFinder_PBar.setMaximum(len(self.SpectraList))
             self.IsoFind_btn.setEnabled(False)
+            print(self.SpectraList)
             for index, _spectra in enumerate(self.SpectraList, 1):
                 self.IsoFinder_PBar.setValue(index)
                 QApplication.processEvents()
