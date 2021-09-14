@@ -186,8 +186,8 @@ def SaveOutput(output_list, input_filepath, ResultPath, Diff):
 
 def PatternSearch(spectrum_path: str, database_path: str, ResultPath:str, adduct_list: list, charge,  search_property: list, label_list: list, Filtering: list, PatternOptions:list):
     # Leggo il file che contiene la lista di composti da cercare ## DATABASE ##
-    df_db = pd.read_csv(database_path, dtype={"Formula": str, "Mass": float})
-    #df_db = pd.read_csv(database_path, sep="\t", dtype={"Formula": str, "Mass": float})
+    #df_db = pd.read_csv(database_path, dtype={"Formula": str, "Mass": float})
+    df_db = pd.read_csv(database_path, sep="\t", dtype={"Formula": str, "Mass": float})
     
     database = df_db.to_numpy()
 

@@ -48,12 +48,12 @@ class Ui(QDialog):
     def openDatabase_Dialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        files, _ = QFileDialog.getOpenFileName(self, "Select Compounds List file", "", "Text Files (*.txt)", options=options)
+        files, _ = QFileDialog.getOpenFileNames(self, "Select Compounds List file", "", "Text Files (*.txt)", options=options)
         if files:
             self.DB_line.setText(files[0])
             self.DB_path = files[0]
             self.Adducts_GBox.setEnabled(True)
-        #print(self.DB_path) # FOR DEBUG
+        print(self.DB_path) # FOR DEBUG
     
     # ENABLE/DISABLE +/- ADDUCTOR SELECTOR
     def Enable_Adducts_Selector(self):
