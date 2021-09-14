@@ -1,7 +1,6 @@
-import numpy as np
 from re import findall
 from element import Element
-from typing import List, Tuple
+from typing import List
 
 ELECTRON_WEIGHT = 0.0005484
 

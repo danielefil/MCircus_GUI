@@ -1,8 +1,5 @@
-#import time
-#from element import Element
 import re
 import pandas as pd
-import numpy as np
 
 
 
@@ -81,8 +78,7 @@ def decomposer(Mtot, atoms, limits, mass=0, formula="", output=[]):
     
     return output    
 
-# # FILTER -- TO BE IMPLEMENTED
-
+# # FILTER
 
 def Calc_filter(df_results, charge: int, filtri: dict):
 

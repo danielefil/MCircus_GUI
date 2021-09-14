@@ -1,7 +1,6 @@
 import re
 import pandas as pd
 import numpy as np
-#from pandas.core.indexes.base import Index
 
 ### DBE CALCULATOR ###
 def DBE(formula):
@@ -138,11 +137,8 @@ def FormulaRefiner(Compounds_path, charge: int, filtri: dict):
         
 
 ######################################
-###########  MAIN PROGRAM  ###########
+######  MAIN PROGRAM FOR DEBUG  ######
 ######################################
-
-
-
 
 ## WIN PATH
 #spectrum_path = r"C:\Users\df426\Desktop\AnalisiCromo\Spectra\Part2_2020_7_3_cromoacetato_gallico_1a3_h2o_meoh_1a100_400-2000_NEG.csv"

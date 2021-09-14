@@ -7,7 +7,7 @@ import itertools as it
 import numpy as np
 import math
 
-from numpy import NaN, testing
+from numpy import NaN
 import molecule
 
 

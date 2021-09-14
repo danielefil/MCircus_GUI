@@ -7,7 +7,6 @@ from Spectra_class import Spectra
 import pandas as pd
 import numpy as np
 import itertools as it
-import os
 
 ## FILTRO ##
 

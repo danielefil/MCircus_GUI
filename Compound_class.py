@@ -1,6 +1,5 @@
 import re
 import molecule
-import numpy as np
 
 
 def del_repetition(text: str):
