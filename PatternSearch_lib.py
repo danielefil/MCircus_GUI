@@ -102,7 +102,7 @@ def find_pattern(theo_pattern, spectra: np.array, _diff: int, search_mode: str):
         else:
             find_iso = diff(spectra[:, 0], iso_molecule[0], _diff, "dalton")
         if find_iso != None:
-            # lista output: m/z sperimentale, int. sperimentale, m/z teorico, ubt. teorico
+            # lista output: m/z sperimentale, int. sperimentale, m/z teorico, int. teorico
             exp_p += 1
             ls = [spectra[find_iso[0], 0], spectra[find_iso[0], 1],
                   iso_molecule[0], iso_molecule[1]]
